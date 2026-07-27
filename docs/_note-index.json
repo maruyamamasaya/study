@@ -30,6 +30,9 @@
   "Reactでよく出てくる Component → Props ／ State": [
     "記事：基礎編/Reactでよく出てくる Component → Props ／ State"
   ],
+  "Session（セッション）基礎編": [
+    "Session（セッション）基礎編"
+  ],
   "TypeScript 基礎編　 ― JavaScriptを「安全に書く」ための言語 ―": [
     "記事：基礎編/TypeScript 基礎編　 ― JavaScriptを「安全に書く」ための言語 ―"
   ],
@@ -64,5 +67,8 @@
   ],
   "フロントエンドエンジニアに必要なスキル": [
     "フロントエンドエンジニアに必要なスキル"
+  ],
+  "無題のファイル": [
+    "無題のファイル"
   ]
 }
