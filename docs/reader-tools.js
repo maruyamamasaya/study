@@ -2,6 +2,77 @@
   'use strict';
 
   const JAPANESE_CHARACTERS_PER_MINUTE = 500;
+  const MOBILE_HEADER_BREAKPOINT = 600;
+
+  function getCurrentNotePath() {
+    const route = window.location.hash.replace(/^#\/?/, '').split(/[?#]/)[0];
+
+    if (!route) {
+      return 'Readme.md';
+    }
+
+    try {
+      return decodeURIComponent(route);
+    } catch (error) {
+      return route;
+    }
+  }
+
+  function updateReaderHeader() {
+    let header = document.querySelector('.reader-header');
+
+    if (!header) {
+      header = document.createElement('header');
+      header.className = 'reader-header';
+      header.setAttribute('aria-label', '現在のノート');
+      header.innerHTML =
+        '<div class="reader-header__inner">' +
+          '<p class="reader-header__path"></p>' +
+          '<p class="reader-header__title"></p>' +
+        '</div>';
+      document.body.appendChild(header);
+    }
+
+    const notePath = getCurrentNotePath();
+    const pathParts = notePath.split('/').filter(Boolean);
+    const fileName = pathParts.pop() || 'Readme.md';
+    const title = fileName.replace(/\.md$/i, '');
+    const directory = pathParts.length ? pathParts.join(' / ') : 'トップ';
+
+    header.querySelector('.reader-header__path').textContent = directory;
+    header.querySelector('.reader-header__title').textContent = title;
+    header.classList.remove('is-hidden');
+    window.readerHeaderPreviousScrollPosition = window.scrollY;
+  }
+
+  function enableMobileHeaderHiding() {
+    if (window.readerHeaderScrollHandler) {
+      return;
+    }
+
+    window.readerHeaderPreviousScrollPosition = window.scrollY;
+    window.readerHeaderScrollHandler = function () {
+      const header = document.querySelector('.reader-header');
+      const currentScrollPosition = window.scrollY;
+      const previousScrollPosition = window.readerHeaderPreviousScrollPosition;
+
+      if (!header) {
+        return;
+      }
+
+      if (window.innerWidth > MOBILE_HEADER_BREAKPOINT || currentScrollPosition <= 16) {
+        header.classList.remove('is-hidden');
+      } else if (currentScrollPosition > previousScrollPosition) {
+        header.classList.add('is-hidden');
+      } else if (currentScrollPosition < previousScrollPosition) {
+        header.classList.remove('is-hidden');
+      }
+
+      window.readerHeaderPreviousScrollPosition = currentScrollPosition;
+    };
+
+    window.addEventListener('scroll', window.readerHeaderScrollHandler, { passive: true });
+  }
 
   function createReaderMeta(content) {
     const temporaryElement = document.createElement('div');
@@ -225,6 +296,8 @@
     });
 
     hook.doneEach(function () {
+      updateReaderHeader();
+      enableMobileHeaderHiding();
       createReaderNavigation();
       updateTableOfContents();
       enableCodeBlockCopying();
