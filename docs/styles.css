@@ -134,8 +134,9 @@ body::before {
   color: var(--accent);
 }
 
-/* Docsify wraps heading text in anchors. Keep every heading level green in all
- * link states so the bundled theme cannot reintroduce its dark blue color. */
+/* Docsify wraps heading text in anchors. Set the anchor color explicitly (and
+ * with enough priority to beat Docsify's link-state rules), because changing
+ * only the h2/h3 color does not affect a child link that has its own color. */
 .markdown-section h1 a,
 .markdown-section h2 a,
 .markdown-section h3 a,
@@ -148,7 +149,7 @@ body::before {
 .markdown-section h4 a:visited,
 .markdown-section h5 a:visited,
 .markdown-section h6 a:visited {
-  color: inherit;
+  color: var(--heading) !important;
   text-decoration-color: transparent;
 }
 
@@ -164,7 +165,7 @@ body::before {
 .markdown-section h4 a:focus-visible,
 .markdown-section h5 a:focus-visible,
 .markdown-section h6 a:focus-visible {
-  color: var(--heading-hover);
+  color: var(--heading-hover) !important;
 }
 
 .markdown-section p,
