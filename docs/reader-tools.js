@@ -323,7 +323,9 @@
     }
 
     const list = drawer.querySelector('.reader-toc-drawer__list');
-    const headings = document.querySelectorAll('.markdown-section h2, .markdown-section h3, .markdown-section h4');
+    const headings = document.querySelectorAll(
+      '.markdown-section h1, .markdown-section h2, .markdown-section h3, .markdown-section h4'
+    );
     list.innerHTML = '';
 
     headings.forEach(function (heading) {
