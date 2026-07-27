@@ -10,6 +10,8 @@
   --accent: #65f59a;
   --accent-hover: #9affbd;
   --accent-soft: rgba(101, 245, 154, 0.12);
+  --heading: #78f5a5;
+  --heading-hover: #b0ffca;
 }
 
 * {
@@ -100,14 +102,11 @@ body::before {
 
 .markdown-section h1,
 .markdown-section h2,
-.markdown-section h3 {
-  color: var(--accent);
-  font-weight: 650;
-  letter-spacing: -0.025em;
-}
-
-.markdown-section h4 {
-  color: var(--text-strong);
+.markdown-section h3,
+.markdown-section h4,
+.markdown-section h5,
+.markdown-section h6 {
+  color: var(--heading);
   font-weight: 650;
   letter-spacing: -0.025em;
 }
@@ -121,21 +120,51 @@ body::before {
 
 .markdown-section h2 {
   border-bottom: 1px solid rgba(43, 52, 64, 0.72);
-  color: var(--accent);
   font-size: 1.5rem;
   margin-top: 2.8rem;
   padding-bottom: 0.45rem;
 }
 
 .markdown-section h3 {
-  color: var(--accent);
   font-size: 1.18rem;
   margin-top: 2.2rem;
 }
 
-.markdown-section h4,
 .markdown-section strong {
   color: var(--accent);
+}
+
+/* Docsify wraps heading text in anchors. Keep every heading level green in all
+ * link states so the bundled theme cannot reintroduce its dark blue color. */
+.markdown-section h1 a,
+.markdown-section h2 a,
+.markdown-section h3 a,
+.markdown-section h4 a,
+.markdown-section h5 a,
+.markdown-section h6 a,
+.markdown-section h1 a:visited,
+.markdown-section h2 a:visited,
+.markdown-section h3 a:visited,
+.markdown-section h4 a:visited,
+.markdown-section h5 a:visited,
+.markdown-section h6 a:visited {
+  color: inherit;
+  text-decoration-color: transparent;
+}
+
+.markdown-section h1 a:hover,
+.markdown-section h2 a:hover,
+.markdown-section h3 a:hover,
+.markdown-section h4 a:hover,
+.markdown-section h5 a:hover,
+.markdown-section h6 a:hover,
+.markdown-section h1 a:focus-visible,
+.markdown-section h2 a:focus-visible,
+.markdown-section h3 a:focus-visible,
+.markdown-section h4 a:focus-visible,
+.markdown-section h5 a:focus-visible,
+.markdown-section h6 a:focus-visible {
+  color: var(--heading-hover);
 }
 
 .markdown-section p,
