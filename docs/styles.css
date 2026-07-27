@@ -626,12 +626,6 @@ body::before {
     padding-right: 3rem;
   }
 
-  .reader-header.is-hidden {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(-100%);
-  }
-
   .markdown-section h1 {
     font-size: 1.65rem;
   }
