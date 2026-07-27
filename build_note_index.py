@@ -12,8 +12,8 @@ index: dict[str, list[str]] = defaultdict(list)
 for markdown_file in DOCS_DIR.rglob("*.md"):
     relative_path = markdown_file.relative_to(DOCS_DIR)
 
-    # Docsifyのトップページは検索対象から除外
-    if relative_path.as_posix() == "README.md":
+    # DocsifyのトップページはWikiリンクの解決対象から除外
+    if relative_path.as_posix().lower() == "readme.md":
         continue
 
     path_without_extension = relative_path.with_suffix("").as_posix()
