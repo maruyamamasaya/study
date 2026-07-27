@@ -156,6 +156,69 @@
     }
   }
 
+  function copyCodeBlock(codeBlock) {
+    const text = codeBlock.textContent || '';
+    const copyWithFallback = function () {
+      const textArea = document.createElement('textarea');
+      textArea.value = text;
+      textArea.setAttribute('readonly', '');
+      textArea.style.position = 'fixed';
+      textArea.style.opacity = '0';
+      document.body.appendChild(textArea);
+      textArea.select();
+      const copied = document.execCommand('copy');
+      textArea.remove();
+
+      if (!copied) {
+        throw new Error('Copy command was rejected');
+      }
+    };
+
+    const copyPromise = navigator.clipboard && window.isSecureContext
+      ? navigator.clipboard.writeText(text).catch(copyWithFallback)
+      : Promise.resolve().then(copyWithFallback);
+
+    return copyPromise.then(function () {
+      const codeContainer = codeBlock.parentElement;
+      codeContainer.classList.add('is-copied');
+      codeContainer.setAttribute('aria-label', 'コピーしました');
+
+      window.setTimeout(function () {
+        codeContainer.classList.remove('is-copied');
+        codeContainer.setAttribute('aria-label', 'タップしてコードをコピー');
+      }, 1600);
+    }).catch(function () {
+      codeBlock.parentElement.setAttribute(
+        'aria-label',
+        'コピーできませんでした。テキストを選択してコピーしてください'
+      );
+    });
+  }
+
+  function enableCodeBlockCopying() {
+    document.querySelectorAll('.markdown-section pre > code').forEach(function (codeBlock) {
+      const codeContainer = codeBlock.parentElement;
+
+      if (codeContainer.classList.contains('is-copyable')) {
+        return;
+      }
+
+      codeContainer.classList.add('is-copyable');
+      codeContainer.setAttribute('role', 'button');
+      codeContainer.setAttribute('tabindex', '0');
+      codeContainer.setAttribute('aria-label', 'タップしてコードをコピー');
+      codeContainer.addEventListener('click', function () {
+        copyCodeBlock(codeBlock);
+      });
+      codeContainer.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          copyCodeBlock(codeBlock);
+        }
+      });
+    });
+  }
+
   function readerToolsPlugin(hook) {
     hook.afterEach(function (html, next) {
       next(createReaderMeta(html));
@@ -164,6 +227,7 @@
     hook.doneEach(function () {
       createReaderNavigation();
       updateTableOfContents();
+      enableCodeBlockCopying();
       closeTableOfContents();
     });
   }
