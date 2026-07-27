@@ -349,6 +349,38 @@
          */
         let converted = convertImageEmbeds(content);
 
+        /*
+         * Wikiリンクだけが書かれた行が連続する場合は、HTMLへの変換後も
+         * 元の改行が画面に表示されるようにする。通常の文章内や単独行の
+         * Wikiリンクには影響させない。
+         */
+        converted = converted.replace(
+          /^([ \t]*)\[\[([^\]\r\n]+)\]\][ \t]*(\r?\n)(?=[ \t]*\[\[[^\]\r\n]+\]\][ \t]*(?:\r?\n|$))/gm,
+          function (
+            original,
+            indentation,
+            wikiContent,
+            lineBreak
+          ) {
+            try {
+              return (
+                indentation +
+                createWikiLink(wikiContent, index) +
+                '<br>' +
+                lineBreak
+              );
+            } catch (error) {
+              console.error(
+                '[Obsidian WikiLinks] 変換失敗:',
+                original,
+                error
+              );
+
+              return original;
+            }
+          }
+        );
+
         converted = converted.replace(
           /(?<!!)\[\[([^\]]+)\]\]/g,
           function (original, wikiContent) {
