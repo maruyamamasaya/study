@@ -45,7 +45,47 @@ body::before {
   color: var(--text);
   line-height: 1.9;
   max-width: 780px;
-  padding: 3.5rem 2.5rem 7rem;
+  padding: 6.4rem 2.5rem 7rem;
+}
+
+.reader-header {
+  background: rgba(13, 17, 23, 0.72);
+  border-bottom: 1px solid rgba(43, 52, 64, 0.58);
+  left: 0;
+  padding: 0.65rem max(1.25rem, calc((100vw - 780px) / 2 + 2.5rem));
+  position: fixed;
+  right: 0;
+  top: 0;
+  transition: opacity 180ms ease, transform 180ms ease;
+  z-index: 99;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+
+.reader-header__inner {
+  min-width: 0;
+}
+
+.reader-header__path,
+.reader-header__title {
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reader-header__path {
+  color: var(--muted);
+  font-size: 0.64rem;
+  opacity: 0.72;
+}
+
+.reader-header__title {
+  color: var(--text-strong);
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-top: 0.08rem;
+  opacity: 0.86;
 }
 
 .markdown-section h1,
@@ -421,7 +461,17 @@ body::before {
 
   .markdown-section {
     line-height: 1.8;
-    padding: 1.6rem 1.15rem 3.5rem;
+    padding: 5rem 1.15rem 3.5rem;
+  }
+
+  .reader-header {
+    padding: 0.55rem 1.15rem;
+  }
+
+  .reader-header.is-hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-100%);
   }
 
   .markdown-section h1 {
