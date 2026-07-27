@@ -3,6 +3,25 @@
 
   const JAPANESE_CHARACTERS_PER_MINUTE = 500;
   const MOBILE_HEADER_BREAKPOINT = 600;
+  let noteIndexPromise = null;
+
+  function loadNoteIndex() {
+    if (!noteIndexPromise) {
+      noteIndexPromise = fetch('_note-index.json')
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error('ノート一覧を読み込めませんでした');
+          }
+          return response.json();
+        });
+    }
+
+    return noteIndexPromise;
+  }
+
+  function encodeNotePath(path) {
+    return String(path).split('/').map(encodeURIComponent).join('/');
+  }
 
   function setHeaderLineContent(line, text) {
     line.innerHTML =
@@ -144,6 +163,10 @@
         '<span class="reader-navigation__icon" aria-hidden="true">☰</span>' +
         '<span>目次</span>' +
       '</button>' +
+      '<button class="reader-navigation__button reader-search" type="button">' +
+        '<span class="reader-navigation__icon" aria-hidden="true">⌕</span>' +
+        '<span>検索</span>' +
+      '</button>' +
       '<button class="reader-navigation__button reader-back" type="button">' +
         '<span class="reader-navigation__icon" aria-hidden="true">←</span>' +
         '<span>戻る</span>' +
@@ -163,6 +186,8 @@
       openTableOfContents();
     });
 
+    navigation.querySelector('.reader-search').addEventListener('click', openSearch);
+
     navigation.querySelector('.reader-back').addEventListener('click', function () {
       if (window.history.length > 1) {
         window.history.back();
@@ -175,6 +200,87 @@
     navigation.querySelector('.reader-forward').addEventListener('click', function () {
       window.history.forward();
     });
+  }
+
+  function closeSearch() {
+    const dialog = document.querySelector('.reader-search-dialog');
+    if (dialog && dialog.open) {
+      dialog.close();
+    }
+  }
+
+  function renderSearchResults() {
+    const dialog = document.querySelector('.reader-search-dialog');
+    const query = dialog.querySelector('.reader-search-dialog__input').value.trim().toLocaleLowerCase('ja');
+    const results = dialog.querySelector('.reader-search-dialog__results');
+
+    if (!query) {
+      results.innerHTML = '<p class="reader-search-dialog__message">検索キーワードを入力してください。</p>';
+      return;
+    }
+    results.innerHTML = '<p class="reader-search-dialog__message">検索中...</p>';
+    loadNoteIndex().then(function (index) {
+      const matches = [];
+      Object.keys(index).forEach(function (title) {
+        if (!title.toLocaleLowerCase('ja').includes(query)) {
+          return;
+        }
+
+        index[title].forEach(function (path) {
+          matches.push({ title: title, path: path });
+        });
+      });
+
+      results.innerHTML = '';
+      if (!matches.length) {
+        results.innerHTML = '<p class="reader-search-dialog__message">一致するノートはありません。</p>';
+        return;
+      }
+
+      matches.forEach(function (note) {
+        const link = document.createElement('a');
+        link.className = 'reader-search-result';
+        link.href = '#/' + encodeNotePath(note.path);
+        link.innerHTML = '<strong></strong><span></span>';
+        link.querySelector('strong').textContent = note.title;
+        link.querySelector('span').textContent = note.path;
+        link.addEventListener('click', closeSearch);
+        results.appendChild(link);
+      });
+    }).catch(function () {
+      results.innerHTML = '<p class="reader-search-dialog__message">検索データを読み込めませんでした。</p>';
+    });
+  }
+
+  function createSearchDialog() {
+    if (document.querySelector('.reader-search-dialog')) {
+      return;
+    }
+
+    const dialog = document.createElement('dialog');
+    dialog.className = 'reader-search-dialog';
+    dialog.setAttribute('aria-label', 'ノートを検索');
+    dialog.innerHTML =
+      '<form class="reader-search-dialog__panel" method="dialog">' +
+        '<header><strong>ノートを検索</strong><button value="close" aria-label="検索を閉じる">×</button></header>' +
+        '<input class="reader-search-dialog__input" type="search" placeholder="タイトルを入力" aria-label="タイトルを検索" autocomplete="off">' +
+        '<div class="reader-search-dialog__results" aria-live="polite"></div>' +
+      '</form>';
+    document.body.appendChild(dialog);
+
+    dialog.querySelector('.reader-search-dialog__input').addEventListener('input', renderSearchResults);
+    dialog.addEventListener('click', function (event) {
+      if (event.target === dialog) {
+        closeSearch();
+      }
+    });
+  }
+
+  function openSearch() {
+    createSearchDialog();
+    const dialog = document.querySelector('.reader-search-dialog');
+    dialog.showModal();
+    dialog.querySelector('.reader-search-dialog__input').focus();
   }
 
   function closeTableOfContents() {
@@ -330,6 +436,7 @@
       updateReaderHeader();
       enableMobileHeaderHiding();
       createReaderNavigation();
+      createSearchDialog();
       updateTableOfContents();
       enableCodeBlockCopying();
       closeTableOfContents();
