@@ -89,39 +89,16 @@
 
     setHeaderLineContent(header.querySelector('.reader-header__path'), directory);
     setHeaderLineContent(header.querySelector('.reader-header__title'), title);
-    header.classList.remove('is-hidden');
-    window.readerHeaderPreviousScrollPosition = window.scrollY;
     window.requestAnimationFrame(updateHeaderOverflow);
   }
 
-  function enableMobileHeaderHiding() {
-    if (window.readerHeaderScrollHandler) {
+  function enableHeaderOverflowUpdates() {
+    if (window.readerHeaderResizeHandler) {
       return;
     }
 
-    window.readerHeaderPreviousScrollPosition = window.scrollY;
-    window.readerHeaderScrollHandler = function () {
-      const header = document.querySelector('.reader-header');
-      const currentScrollPosition = window.scrollY;
-      const previousScrollPosition = window.readerHeaderPreviousScrollPosition;
-
-      if (!header) {
-        return;
-      }
-
-      if (window.innerWidth > MOBILE_HEADER_BREAKPOINT || currentScrollPosition <= 16) {
-        header.classList.remove('is-hidden');
-      } else if (currentScrollPosition > previousScrollPosition) {
-        header.classList.add('is-hidden');
-      } else if (currentScrollPosition < previousScrollPosition) {
-        header.classList.remove('is-hidden');
-      }
-
-      window.readerHeaderPreviousScrollPosition = currentScrollPosition;
-    };
-
-    window.addEventListener('scroll', window.readerHeaderScrollHandler, { passive: true });
-    window.addEventListener('resize', updateHeaderOverflow);
+    window.readerHeaderResizeHandler = updateHeaderOverflow;
+    window.addEventListener('resize', window.readerHeaderResizeHandler);
   }
 
   function createReaderMeta(content) {
@@ -434,7 +411,7 @@
 
     hook.doneEach(function () {
       updateReaderHeader();
-      enableMobileHeaderHiding();
+      enableHeaderOverflowUpdates();
       createReaderNavigation();
       createSearchDialog();
       updateTableOfContents();
