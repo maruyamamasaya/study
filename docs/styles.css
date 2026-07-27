@@ -1,0 +1,238 @@
+:root {
+  color-scheme: dark;
+  --page-bg: #0d1117;
+  --surface: #151b23;
+  --surface-hover: #1c2530;
+  --border: #2b3440;
+  --text: #d8dee9;
+  --text-strong: #f0f3f6;
+  --muted: #8b98a7;
+  --accent: #78b7ff;
+  --accent-soft: rgba(88, 166, 255, 0.13);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: var(--page-bg);
+}
+
+body {
+  color: var(--text);
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans JP", sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+body::before {
+  background: radial-gradient(circle, rgba(120, 183, 255, 0.08), transparent 68%);
+  content: "";
+  height: 28rem;
+  left: 50%;
+  pointer-events: none;
+  position: fixed;
+  top: -18rem;
+  transform: translateX(-50%);
+  width: min(90vw, 72rem);
+}
+
+.markdown-section {
+  color: var(--text);
+  line-height: 1.9;
+  max-width: 780px;
+  padding: 3.5rem 2.5rem 5rem;
+}
+
+.markdown-section h1,
+.markdown-section h2,
+.markdown-section h3,
+.markdown-section h4 {
+  color: var(--text-strong);
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
+.markdown-section h1 {
+  border-bottom: 1px solid var(--border);
+  font-size: 2.1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.7rem;
+}
+
+.markdown-section h2 {
+  border-bottom: 1px solid rgba(43, 52, 64, 0.72);
+  font-size: 1.5rem;
+  margin-top: 2.8rem;
+  padding-bottom: 0.45rem;
+}
+
+.markdown-section h3 {
+  font-size: 1.18rem;
+  margin-top: 2.2rem;
+}
+
+.markdown-section p,
+.markdown-section li {
+  color: var(--text);
+}
+
+.markdown-section a {
+  color: var(--accent);
+  font-weight: 500;
+  text-decoration-color: rgba(120, 183, 255, 0.35);
+  text-underline-offset: 0.2em;
+  transition: color 160ms ease, text-decoration-color 160ms ease;
+}
+
+.markdown-section a:hover {
+  color: #a7d1ff;
+  text-decoration-color: currentColor;
+}
+
+.markdown-section blockquote {
+  background: var(--accent-soft);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 8px 8px 0;
+  color: var(--text);
+  margin: 1.8rem 0;
+  padding: 0.8rem 1.15rem;
+}
+
+.markdown-section code {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  color: #f0b6d2;
+  font-size: 0.88em;
+  padding: 0.14em 0.38em;
+}
+
+.markdown-section pre {
+  background: #090d12;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+}
+
+.markdown-section pre > code {
+  background: transparent;
+  border: 0;
+  color: #ccd6e0;
+  padding: 0;
+}
+
+.markdown-section table {
+  display: table;
+  width: 100%;
+}
+
+.markdown-section tr,
+.markdown-section tr:nth-child(2n) {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.markdown-section th,
+.markdown-section td {
+  border-color: var(--border);
+}
+
+.reader-meta {
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  display: flex;
+  font-size: 0.78rem;
+  gap: 0.75rem;
+  margin: -1.25rem 0 2.5rem;
+  padding-bottom: 1rem;
+}
+
+.reader-back {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-weight: 600;
+  gap: 0.35rem;
+  margin-right: auto;
+  padding: 0.48rem 0.7rem;
+  transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+}
+
+.reader-back:hover {
+  background: var(--surface-hover);
+  border-color: #445163;
+  transform: translateX(-2px);
+}
+
+.reader-back:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.reader-stat {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.35rem;
+  white-space: nowrap;
+}
+
+.reader-stat + .reader-stat::before {
+  color: var(--border);
+  content: "•";
+  margin-right: 0.4rem;
+}
+
+@media (max-width: 600px) {
+  body {
+    font-size: 13.5px;
+  }
+
+  .markdown-section {
+    line-height: 1.8;
+    padding: 1.6rem 1.15rem 3.5rem;
+  }
+
+  .markdown-section h1 {
+    font-size: 1.65rem;
+  }
+
+  .markdown-section h2 {
+    font-size: 1.28rem;
+    margin-top: 2.2rem;
+  }
+
+  .markdown-section h3 {
+    font-size: 1.08rem;
+  }
+
+  .reader-meta {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: -0.35rem;
+  }
+
+  .reader-back {
+    flex-basis: 100%;
+    justify-content: center;
+    margin-bottom: 0.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
