@@ -58,11 +58,7 @@
     document.body.appendChild(navigation);
 
     navigation.querySelector('.reader-toc').addEventListener('click', function () {
-      const sidebarToggle = document.querySelector('.sidebar-toggle');
-
-      if (sidebarToggle) {
-        sidebarToggle.click();
-      }
+      openTableOfContents();
     });
 
     navigation.querySelector('.reader-back').addEventListener('click', function () {
@@ -79,6 +75,87 @@
     });
   }
 
+  function closeTableOfContents() {
+    const drawer = document.querySelector('.reader-toc-drawer');
+    const backdrop = document.querySelector('.reader-toc-backdrop');
+    const tocButton = document.querySelector('.reader-toc');
+
+    if (!drawer || !backdrop) {
+      return;
+    }
+
+    drawer.classList.remove('is-open');
+    backdrop.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    tocButton.setAttribute('aria-expanded', 'false');
+  }
+
+  function openTableOfContents() {
+    const drawer = document.querySelector('.reader-toc-drawer');
+    const backdrop = document.querySelector('.reader-toc-backdrop');
+
+    if (!drawer || !backdrop) {
+      return;
+    }
+
+    drawer.classList.add('is-open');
+    backdrop.classList.add('is-open');
+    drawer.setAttribute('aria-hidden', 'false');
+    document.querySelector('.reader-toc').setAttribute('aria-expanded', 'true');
+    drawer.querySelector('.reader-toc-drawer__close').focus();
+  }
+
+  function updateTableOfContents() {
+    let drawer = document.querySelector('.reader-toc-drawer');
+    let backdrop = document.querySelector('.reader-toc-backdrop');
+
+    if (!drawer) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'reader-toc-backdrop';
+      backdrop.addEventListener('click', closeTableOfContents);
+
+      drawer = document.createElement('aside');
+      drawer.className = 'reader-toc-drawer';
+      drawer.setAttribute('aria-hidden', 'true');
+      drawer.setAttribute('aria-label', '目次');
+      drawer.innerHTML =
+        '<div class="reader-toc-drawer__header">' +
+          '<strong>目次</strong>' +
+          '<button class="reader-toc-drawer__close" type="button" aria-label="目次を閉じる">×</button>' +
+        '</div>' +
+        '<nav class="reader-toc-drawer__list" aria-label="ページ内の見出し"></nav>';
+      drawer.querySelector('.reader-toc-drawer__close')
+        .addEventListener('click', closeTableOfContents);
+
+      document.body.appendChild(backdrop);
+      document.body.appendChild(drawer);
+
+      document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape') {
+          closeTableOfContents();
+        }
+      });
+    }
+
+    const list = drawer.querySelector('.reader-toc-drawer__list');
+    const headings = document.querySelectorAll('.markdown-section h2, .markdown-section h3, .markdown-section h4');
+    list.innerHTML = '';
+
+    headings.forEach(function (heading) {
+      const headingAnchor = heading.querySelector('.anchor');
+      const link = document.createElement('a');
+      link.className = 'reader-toc-drawer__link reader-toc-drawer__link--' + heading.tagName.toLowerCase();
+      link.href = headingAnchor ? headingAnchor.getAttribute('href') : '#' + heading.id;
+      link.textContent = heading.textContent;
+      link.addEventListener('click', closeTableOfContents);
+      list.appendChild(link);
+    });
+
+    if (!headings.length) {
+      list.innerHTML = '<p class="reader-toc-drawer__empty">このページには見出しがありません。</p>';
+    }
+  }
+
   function readerToolsPlugin(hook) {
     hook.afterEach(function (html, next) {
       next(createReaderMeta(html));
@@ -86,6 +163,8 @@
 
     hook.doneEach(function () {
       createReaderNavigation();
+      updateTableOfContents();
+      closeTableOfContents();
     });
   }
 
