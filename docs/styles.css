@@ -1,5 +1,7 @@
 :root {
   color-scheme: dark;
+  /* Also override Docsify's theme variable so headings cannot fall back to Vue blue. */
+  --theme-color: #65f59a;
   --page-bg: #0d1117;
   --surface: #151b23;
   --surface-hover: #1c2530;
@@ -100,13 +102,13 @@ body::before {
   opacity: 0.86;
 }
 
-.markdown-section h1,
-.markdown-section h2,
-.markdown-section h3,
-.markdown-section h4,
-.markdown-section h5,
-.markdown-section h6 {
-  color: var(--heading);
+/* Keep these selectors deliberately more specific than Docsify's theme. The
+ * !important declarations are a narrow override for heading levels 1–4 only. */
+body .markdown-section h1,
+body .markdown-section h2,
+body .markdown-section h3,
+body .markdown-section h4 {
+  color: var(--heading) !important;
   font-weight: 650;
   letter-spacing: -0.025em;
 }
@@ -137,34 +139,34 @@ body::before {
 /* Docsify wraps heading text in anchors. Set the anchor color explicitly (and
  * with enough priority to beat Docsify's link-state rules), because changing
  * only the h2/h3 color does not affect a child link that has its own color. */
-.markdown-section h1 a,
-.markdown-section h2 a,
-.markdown-section h3 a,
-.markdown-section h4 a,
-.markdown-section h5 a,
-.markdown-section h6 a,
-.markdown-section h1 a:visited,
-.markdown-section h2 a:visited,
-.markdown-section h3 a:visited,
-.markdown-section h4 a:visited,
-.markdown-section h5 a:visited,
-.markdown-section h6 a:visited {
+body .markdown-section h1 a,
+body .markdown-section h2 a,
+body .markdown-section h3 a,
+body .markdown-section h4 a,
+body .markdown-section h1 a:visited,
+body .markdown-section h2 a:visited,
+body .markdown-section h3 a:visited,
+body .markdown-section h4 a:visited {
   color: var(--heading) !important;
   text-decoration-color: transparent;
 }
 
-.markdown-section h1 a:hover,
-.markdown-section h2 a:hover,
-.markdown-section h3 a:hover,
-.markdown-section h4 a:hover,
-.markdown-section h5 a:hover,
-.markdown-section h6 a:hover,
-.markdown-section h1 a:focus-visible,
-.markdown-section h2 a:focus-visible,
-.markdown-section h3 a:focus-visible,
-.markdown-section h4 a:focus-visible,
-.markdown-section h5 a:focus-visible,
-.markdown-section h6 a:focus-visible {
+/* Docsify may place the visible heading text in a span inside its anchor. */
+body .markdown-section h1 a span,
+body .markdown-section h2 a span,
+body .markdown-section h3 a span,
+body .markdown-section h4 a span {
+  color: inherit !important;
+}
+
+body .markdown-section h1 a:hover,
+body .markdown-section h2 a:hover,
+body .markdown-section h3 a:hover,
+body .markdown-section h4 a:hover,
+body .markdown-section h1 a:focus-visible,
+body .markdown-section h2 a:focus-visible,
+body .markdown-section h3 a:focus-visible,
+body .markdown-section h4 a:focus-visible {
   color: var(--heading-hover) !important;
 }
 
