@@ -4,6 +4,35 @@
   const JAPANESE_CHARACTERS_PER_MINUTE = 500;
   const MOBILE_HEADER_BREAKPOINT = 600;
 
+  function setHeaderLineContent(line, text) {
+    line.innerHTML =
+      '<span class="reader-header__track">' +
+        '<span class="reader-header__text"></span>' +
+        '<span class="reader-header__text reader-header__text--copy" aria-hidden="true"></span>' +
+      '</span>';
+
+    line.querySelectorAll('.reader-header__text').forEach(function (textElement) {
+      textElement.textContent = text;
+    });
+  }
+
+  function updateHeaderOverflow() {
+    const header = document.querySelector('.reader-header');
+
+    if (!header) {
+      return;
+    }
+
+    header.querySelectorAll('.reader-header__path, .reader-header__title')
+      .forEach(function (line) {
+        const text = line.querySelector('.reader-header__text');
+        const shouldScroll = window.innerWidth <= MOBILE_HEADER_BREAKPOINT &&
+          text && text.scrollWidth > line.clientWidth;
+
+        line.classList.toggle('is-overflowing', shouldScroll);
+      });
+  }
+
   function getCurrentNotePath() {
     const route = window.location.hash.replace(/^#\/?/, '').split(/[?#]/)[0];
 
@@ -39,10 +68,11 @@
     const title = fileName.replace(/\.md$/i, '');
     const directory = pathParts.length ? pathParts.join(' / ') : 'トップ';
 
-    header.querySelector('.reader-header__path').textContent = directory;
-    header.querySelector('.reader-header__title').textContent = title;
+    setHeaderLineContent(header.querySelector('.reader-header__path'), directory);
+    setHeaderLineContent(header.querySelector('.reader-header__title'), title);
     header.classList.remove('is-hidden');
     window.readerHeaderPreviousScrollPosition = window.scrollY;
+    window.requestAnimationFrame(updateHeaderOverflow);
   }
 
   function enableMobileHeaderHiding() {
@@ -72,6 +102,7 @@
     };
 
     window.addEventListener('scroll', window.readerHeaderScrollHandler, { passive: true });
+    window.addEventListener('resize', updateHeaderOverflow);
   }
 
   function createReaderMeta(content) {
