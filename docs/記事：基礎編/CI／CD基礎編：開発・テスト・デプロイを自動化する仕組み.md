@@ -230,7 +230,7 @@ GitHubへpush
 
 CI/CDを実現する代表的なサービスの一つが、
 
-**GitHub Actions**
+**[[GitHub Actions]]**
 
 です。
 
