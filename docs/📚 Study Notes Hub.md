@@ -69,7 +69,15 @@ WEBマーケティング
 [[第2章 SEO（検索エンジン最適化）]]
 [[第3章 Google Search Console]]
 
+## 作業ログ
+[[EC2からhttps化する方法]]
+[[PM2でアプリを再起動する更新用デプロイスクリプト]]
+[[Amazon Linux 2023上のWordPressサーバーを軽量化・高速化・安定化するための設定メモ]]
 
 ## 生成AIトレンド
 [[Claude Opus 5]]
 [[ChatGPT（GPT-5.5）]]
+
+過去ログ
+[[🌟Obsidianが最高のメモツールである理由]]
+
