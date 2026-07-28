@@ -3,6 +3,7 @@
 
   const JAPANESE_CHARACTERS_PER_MINUTE = 500;
   const MOBILE_HEADER_BREAKPOINT = 600;
+  const HOMEPAGE_FILE = '📚 Study Notes Hub.md';
   let noteIndexPromise = null;
 
   function loadNoteIndex() {
@@ -56,7 +57,7 @@
     const route = window.location.hash.replace(/^#\/?/, '').split(/[?#]/)[0];
 
     if (!route) {
-      return 'Readme.md';
+      return HOMEPAGE_FILE;
     }
 
     try {
@@ -83,7 +84,7 @@
 
     const notePath = getCurrentNotePath();
     const pathParts = notePath.split('/').filter(Boolean);
-    const fileName = pathParts.pop() || 'Readme.md';
+    const fileName = pathParts.pop() || HOMEPAGE_FILE;
     const title = fileName.replace(/\.md$/i, '');
     const directory = pathParts.length ? pathParts.join(' / ') : 'トップ';
 
