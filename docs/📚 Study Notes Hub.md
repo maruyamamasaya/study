@@ -78,6 +78,9 @@ WEBマーケティング
 [[Claude Opus 5]]
 [[ChatGPT（GPT-5.5）]]
 
+### 生成AIでの開発について
+[[AGENTS.mdとは？（初心者向け）]]
+
 過去ログ
 [[🌟Obsidianが最高のメモツールである理由]]
 
