@@ -175,6 +175,19 @@ body .markdown-section h4 a:focus-visible {
   color: var(--text);
 }
 
+.markdown-section .task-list-item {
+  list-style: none;
+}
+
+.markdown-section .task-list-item input[type="checkbox"] {
+  accent-color: var(--accent);
+  cursor: pointer;
+  height: 1.1rem;
+  margin: 0 0.55rem 0 -1.45rem;
+  vertical-align: -0.15rem;
+  width: 1.1rem;
+}
+
 .markdown-section a {
   color: var(--accent);
   font-weight: 500;
