@@ -407,6 +407,43 @@
     });
   }
 
+  function getChecklistStorageKey(checkbox, occurrence) {
+    const item = checkbox.closest('li');
+    const itemText = item ? item.textContent.replace(/\s+/g, ' ').trim() : '';
+
+    return [
+      'study-notes-checklist',
+      getCurrentNotePath(),
+      itemText,
+      occurrence
+    ].join('::');
+  }
+
+  function enablePersistentChecklists() {
+    const occurrences = Object.create(null);
+
+    document.querySelectorAll('.markdown-section input[type="checkbox"]')
+      .forEach(function (checkbox) {
+        const item = checkbox.closest('li');
+        const itemText = item ? item.textContent.replace(/\s+/g, ' ').trim() : '';
+        const occurrence = occurrences[itemText] || 0;
+        const storageKey = getChecklistStorageKey(checkbox, occurrence);
+        occurrences[itemText] = occurrence + 1;
+
+        checkbox.disabled = false;
+        checkbox.checked = window.localStorage.getItem(storageKey) === 'true';
+        checkbox.setAttribute('aria-label', itemText || 'チェック項目');
+
+        checkbox.addEventListener('change', function () {
+          if (checkbox.checked) {
+            window.localStorage.setItem(storageKey, 'true');
+          } else {
+            window.localStorage.removeItem(storageKey);
+          }
+        });
+      });
+  }
+
   function readerToolsPlugin(hook) {
     hook.afterEach(function (html, next) {
       next(createReaderMeta(html));
@@ -419,6 +456,7 @@
       createSearchDialog();
       updateTableOfContents();
       enableCodeBlockCopying();
+      enablePersistentChecklists();
       closeTableOfContents();
     });
   }
