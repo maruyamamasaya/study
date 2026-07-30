@@ -14,11 +14,53 @@
   "API Routes 調査結果": [
     "作業ログ/yasukari/API Routes 調査結果"
   ],
+  "AWS Certificate Manager（ACM）": [
+    "記事：基礎編/基礎AWS/AWS Certificate Manager（ACM）"
+  ],
+  "AWS Lambdaとは？": [
+    "記事：基礎編/基礎AWS/AWS Lambdaとは？"
+  ],
+  "AWSにおけるAZ": [
+    "記事：基礎編/基礎AWS/AWSにおけるAZ"
+  ],
+  "AWSのAIサービス全体像": [
+    "記事：基礎編/基礎AWS/AWSのAIサービス全体像"
+  ],
+  "AWSリージョン（Region）": [
+    "記事：基礎編/基礎AWS/AWSリージョン（Region）"
+  ],
   "AWS接続調査結果": [
     "作業ログ/yasukari/AWS接続調査結果"
   ],
+  "Amazon API Gateway とは？": [
+    "記事：基礎編/基礎AWS/Amazon API Gateway とは？"
+  ],
+  "Amazon Auroraとは？": [
+    "記事：基礎編/基礎AWS/Amazon Auroraとは？"
+  ],
+  "Amazon Bedrockとは？": [
+    "記事：基礎編/基礎AWS/Amazon Bedrockとは？"
+  ],
+  "Amazon CloudFront": [
+    "記事：基礎編/基礎AWS/Amazon CloudFront"
+  ],
+  "Amazon CloudWatch": [
+    "記事：基礎編/基礎AWS/Amazon CloudWatch"
+  ],
+  "Amazon Cognito とは？": [
+    "記事：基礎編/基礎AWS/Amazon Cognito とは？"
+  ],
+  "Amazon EC2（Elastic Compute Cloud）": [
+    "記事：基礎編/基礎AWS/Amazon EC2（Elastic Compute Cloud）"
+  ],
   "Amazon Linux 2023上のWordPressサーバーを軽量化・高速化・安定化するための設定メモ": [
     "作業ログ/Amazon Linux 2023上のWordPressサーバーを軽量化・高速化・安定化するための設定メモ"
+  ],
+  "Amazon RDS（Relational Database Service）とは？": [
+    "記事：基礎編/基礎AWS/Amazon RDS（Relational Database Service）とは？"
+  ],
+  "Amazon S3（Simple Storage Service）": [
+    "記事：基礎編/基礎AWS/Amazon S3（Simple Storage Service）"
   ],
   "App Router": [
     "用語解説/App Router"
@@ -60,7 +102,8 @@
     "記事：基礎編/Docker基礎編：インフラエンジニアが知っておきたいコンテナの仕組み"
   ],
   "DynamoDBとは？": [
-    "記事：基礎編/DynamoDBとは？"
+    "記事：基礎編/DynamoDBとは？",
+    "記事：基礎編/基礎AWS/DynamoDBとは？"
   ],
   "DynamoDB調査結果": [
     "作業ログ/yasukari/DynamoDB調査結果"
@@ -70,6 +113,9 @@
   ],
   "EXPLAINとは？": [
     "記事：実践編/データベース用語解説/EXPLAINとは？"
+  ],
+  "Elastic Beanstalkとは？": [
+    "記事：基礎編/基礎AWS/Elastic Beanstalkとは？"
   ],
   "Event（クリックなど）": [
     "記事：実践編/React編/Event（クリックなど）"
@@ -100,6 +146,9 @@
   ],
   "Hooks（便利機能）": [
     "記事：実践編/React編/Hooks（便利機能）"
+  ],
+  "IAM（Identity and Access Management）": [
+    "記事：基礎編/基礎AWS/IAM（Identity and Access Management）"
   ],
   "IPアドレス設定": [
     "用語解説/IPアドレス設定"
@@ -203,6 +252,9 @@
   "Reactの全体像": [
     "記事：実践編/React編/Reactの全体像"
   ],
+  "Route 53": [
+    "記事：基礎編/基礎AWS/Route 53"
+  ],
   "Router（画面遷移）": [
     "記事：実践編/React編/Router（画面遷移）"
   ],
@@ -301,6 +353,9 @@
   ],
   "にじいろ保育園（園見学：8月21日金）": [
     "臨時フォルダ/にじいろ保育園（園見学：8月21日金）"
+  ],
+  "アーキテクチャ": [
+    "用語解説/アーキテクチャ"
   ],
   "アーンドメディア": [
     "用語解説/アーンドメディア"
@@ -446,6 +501,9 @@
   "水神保育園（園見学：8月19日水）": [
     "臨時フォルダ/水神保育園（園見学：8月19日水）"
   ],
+  "生成AIを作るためのサービス": [
+    "記事：基礎編/基礎AWS/生成AIを作るためのサービス"
+  ],
   "第1章 Webマーケティング基礎編": [
     "記事：実務編/第1章 Webマーケティング基礎編"
   ],
@@ -478,6 +536,9 @@
   ],
   "集客チャネル": [
     "用語解説/集客チャネル"
+  ],
+  "🌟AWS基礎について": [
+    "🌟AWS基礎について"
   ],
   "🌟Obsidianが最高のメモツールである理由": [
     "移管用/Obsidianが最高のメモ/🌟Obsidianが最高のメモツールである理由"
