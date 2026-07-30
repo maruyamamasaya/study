@@ -15,13 +15,15 @@
 [[⑤認証処理]]
 [[認証処理の調査結果]]
 
-[[作業ログ/yasukari/⑥DynamoDB設計]]
+[[作業ログ/yasukari/⑥DynamoDB設計|⑥DynamoDB設計]]
 [[DynamoDB調査結果]]
 
-[[作業ログ/yasukari/⑦AWS構成]]
+[[作業ログ/yasukari/⑦AWS構成|⑦AWS構成]]
 [[AWS接続調査結果]]
 
-[[作業ログ/yasukari/⑧API一覧]]
+[[作業ログ/yasukari/⑧API一覧|⑧API一覧]]
 [[API Routes 調査結果]]
 
-[[作業ログ/yasukari/⑨管理画面]]
+[[作業ログ/yasukari/⑨管理画面|⑨管理画面]]
+[[作業ログ/yasukari/管理画面調査結果|管理画面調査結果]]
+
