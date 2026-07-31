@@ -87,6 +87,61 @@
     return remainder + '秒';
   }
 
+  function calculateOverallProgress(articles) {
+    const articleProgress = articles
+      .filter(function (article) {
+        return article.path !== HOMEPAGE_FILE;
+      })
+      .map(function (article) {
+        return readArticleProgress(article.id);
+      });
+    const completedCount = articleProgress.filter(function (progress) {
+      return progress.completed;
+    }).length;
+    const unreadCount = articleProgress.length - completedCount;
+    const totalLearningSeconds = articleProgress.reduce(function (total, progress) {
+      const learningSeconds = Number(progress.learningSeconds);
+      return total + (Number.isFinite(learningSeconds) && learningSeconds > 0 ? learningSeconds : 0);
+    }, 0);
+    const completionRate = articleProgress.length
+      ? Math.round((completedCount / articleProgress.length) * 100)
+      : 0;
+
+    return {
+      completedCount: completedCount,
+      unreadCount: unreadCount,
+      totalLearningSeconds: totalLearningSeconds,
+      completionRate: completionRate
+    };
+  }
+
+  function renderHomepageProgress(master) {
+    if (getCurrentNotePath() !== HOMEPAGE_FILE) {
+      return;
+    }
+
+    const meta = document.querySelector('.reader-meta');
+    if (!meta) {
+      return;
+    }
+
+    const overallProgress = calculateOverallProgress(master.articles || []);
+    let summary = meta.querySelector('.reader-overall-progress');
+    if (!summary) {
+      summary = document.createElement('span');
+      summary.className = 'reader-overall-progress';
+      meta.appendChild(summary);
+    }
+
+    summary.innerHTML =
+      '<span class="reader-stat">合計時間 ' +
+        formatLearningTime(overallProgress.totalLearningSeconds) +
+      '</span>' +
+      '<span class="reader-stat">読了率 ' + overallProgress.completionRate + '%</span>' +
+      '<span class="reader-stat">読了 ' + overallProgress.completedCount + '件</span>' +
+      '<span class="reader-stat">未読 ' + overallProgress.unreadCount + '件</span>';
+  }
+
   function renderArticleProgress() {
     const meta = document.querySelector('.reader-meta');
     if (!meta || !activeArticle) {
@@ -166,6 +221,7 @@
       writeArticleProgress(article.id, progress);
       activeArticle = { id: article.id, progress: progress };
       renderArticleProgress();
+      renderHomepageProgress(master);
       updateLearningTimer();
     }).catch(function (error) {
       console.warn('[Reader progress]', error);
@@ -625,6 +681,9 @@
     activeArticle.progress.completed = willComplete;
     writeArticleProgress(activeArticle.id, activeArticle.progress);
     renderArticleProgress();
+    loadArticleMaster().then(renderHomepageProgress).catch(function (error) {
+      console.warn('[Reader progress]', error);
+    });
     updateLearningTimer();
   });
 
