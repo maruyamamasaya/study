@@ -4,7 +4,13 @@
   const JAPANESE_CHARACTERS_PER_MINUTE = 500;
   const MOBILE_HEADER_BREAKPOINT = 600;
   const HOMEPAGE_FILE = '📚 Study Notes Hub.md';
+  const ARTICLE_MASTER_FILE = '_article-master.json';
+  const ARTICLE_STORAGE_PREFIX = 'study-notes:article:';
   let noteIndexPromise = null;
+  let articleMasterPromise = null;
+  let activeArticle = null;
+  let activeStartedAt = null;
+  let articleLoadSequence = 0;
 
   function loadNoteIndex() {
     if (!noteIndexPromise) {
@@ -22,6 +28,145 @@
 
   function encodeNotePath(path) {
     return String(path).split('/').map(encodeURIComponent).join('/');
+  }
+
+  function loadArticleMaster() {
+    if (!articleMasterPromise) {
+      articleMasterPromise = fetch(ARTICLE_MASTER_FILE).then(function (response) {
+        if (!response.ok) {
+          throw new Error('記事マスターを読み込めませんでした');
+        }
+        return response.json();
+      });
+    }
+
+    return articleMasterPromise;
+  }
+
+  function getArticleStorageKey(articleId) {
+    return ARTICLE_STORAGE_PREFIX + articleId;
+  }
+
+  function readArticleProgress(articleId) {
+    const defaults = {
+      version: 1,
+      completed: false,
+      learningSeconds: 0,
+      lastViewedAt: null
+    };
+
+    try {
+      const saved = JSON.parse(window.localStorage.getItem(getArticleStorageKey(articleId)) || 'null');
+      return Object.assign(defaults, saved && typeof saved === 'object' ? saved : {});
+    } catch (error) {
+      console.warn('[Reader progress] 保存データを読み込めませんでした', error);
+      return defaults;
+    }
+  }
+
+  function writeArticleProgress(articleId, progress) {
+    try {
+      window.localStorage.setItem(getArticleStorageKey(articleId), JSON.stringify(progress));
+    } catch (error) {
+      console.warn('[Reader progress] 保存データを書き込めませんでした', error);
+    }
+  }
+
+  function formatLearningTime(seconds) {
+    const totalSeconds = Math.max(0, Math.floor(seconds));
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const remainder = totalSeconds % 60;
+
+    if (hours) {
+      return hours + '時間' + minutes + '分';
+    }
+    if (minutes) {
+      return minutes + '分' + remainder + '秒';
+    }
+    return remainder + '秒';
+  }
+
+  function renderArticleProgress() {
+    const meta = document.querySelector('.reader-meta');
+    if (!meta || !activeArticle) {
+      return;
+    }
+
+    const progress = activeArticle.progress;
+    const button = meta.querySelector('.reader-completion');
+    const learningTime = meta.querySelector('.reader-learning-time');
+    button.classList.toggle('is-completed', progress.completed);
+    button.setAttribute('aria-pressed', String(progress.completed));
+    button.textContent = progress.completed ? '✓ 読了' : '○ 未読了';
+    learningTime.textContent = '学習 ' + formatLearningTime(progress.learningSeconds);
+  }
+
+  function flushLearningTime() {
+    if (!activeArticle || activeStartedAt === null) {
+      return;
+    }
+
+    const elapsedSeconds = Math.floor((Date.now() - activeStartedAt) / 1000);
+    if (elapsedSeconds > 0) {
+      activeArticle.progress.learningSeconds += elapsedSeconds;
+      activeStartedAt += elapsedSeconds * 1000;
+      writeArticleProgress(activeArticle.id, activeArticle.progress);
+      renderArticleProgress();
+    }
+  }
+
+  function updateLearningTimer() {
+    if (document.visibilityState === 'visible' && document.hasFocus()) {
+      if (activeArticle && activeStartedAt === null) {
+        activeStartedAt = Date.now();
+      }
+    } else {
+      flushLearningTime();
+      activeStartedAt = null;
+    }
+  }
+
+  function enableLearningTimer() {
+    if (window.readerLearningTimer) {
+      return;
+    }
+
+    document.addEventListener('visibilitychange', updateLearningTimer);
+    window.addEventListener('focus', updateLearningTimer);
+    window.addEventListener('blur', updateLearningTimer);
+    window.addEventListener('pagehide', flushLearningTime);
+    window.readerLearningTimer = window.setInterval(flushLearningTime, 1000);
+  }
+
+  function initializeArticleProgress() {
+    const requestedPath = getCurrentNotePath();
+    const sequence = ++articleLoadSequence;
+    flushLearningTime();
+    activeArticle = null;
+    activeStartedAt = null;
+
+    loadArticleMaster().then(function (master) {
+      if (sequence !== articleLoadSequence) {
+        return;
+      }
+
+      const article = (master.articles || []).find(function (candidate) {
+        return candidate.path.replace(/\.md$/i, '') === requestedPath.replace(/\.md$/i, '');
+      });
+      if (!article) {
+        throw new Error('記事マスターに記事がありません: ' + requestedPath);
+      }
+
+      const progress = readArticleProgress(article.id);
+      progress.lastViewedAt = new Date().toISOString();
+      writeArticleProgress(article.id, progress);
+      activeArticle = { id: article.id, progress: progress };
+      renderArticleProgress();
+      updateLearningTimer();
+    }).catch(function (error) {
+      console.warn('[Reader progress]', error);
+    });
   }
 
   function setHeaderLineContent(line, text) {
@@ -117,6 +262,8 @@
 
     return (
       '<nav class="reader-meta" aria-label="記事情報">' +
+        '<button class="reader-completion" type="button" aria-pressed="false">○ 未読了</button>' +
+        '<span class="reader-stat reader-learning-time">学習 0秒</span>' +
         '<span class="reader-stat" title="1分あたり約500文字で計算">' +
           '<span aria-hidden="true">◷</span> 約' + readingMinutes + '分' +
         '</span>' +
@@ -457,9 +604,21 @@
       updateTableOfContents();
       enableCodeBlockCopying();
       enablePersistentChecklists();
+      initializeArticleProgress();
+      enableLearningTimer();
       closeTableOfContents();
     });
   }
+
+  document.addEventListener('click', function (event) {
+    if (!event.target.classList.contains('reader-completion') || !activeArticle) {
+      return;
+    }
+
+    activeArticle.progress.completed = !activeArticle.progress.completed;
+    writeArticleProgress(activeArticle.id, activeArticle.progress);
+    renderArticleProgress();
+  });
 
   window.$docsify = window.$docsify || {};
   window.$docsify.plugins = (
