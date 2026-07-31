@@ -622,6 +622,11 @@ body .markdown-section h4 a:focus-visible {
   color: var(--text-strong);
 }
 
+.reader-overall-progress {
+  align-items: center;
+  display: contents;
+}
+
 .reader-stat {
   align-items: center;
   display: inline-flex;
