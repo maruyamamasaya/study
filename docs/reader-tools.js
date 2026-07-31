@@ -103,7 +103,7 @@
   }
 
   function flushLearningTime() {
-    if (!activeArticle || activeStartedAt === null) {
+    if (!activeArticle || activeArticle.progress.completed || activeStartedAt === null) {
       return;
     }
 
@@ -117,8 +117,11 @@
   }
 
   function updateLearningTimer() {
-    if (document.visibilityState === 'visible' && document.hasFocus()) {
-      if (activeArticle && activeStartedAt === null) {
+    const shouldCount = activeArticle && !activeArticle.progress.completed &&
+      document.visibilityState === 'visible' && document.hasFocus();
+
+    if (shouldCount) {
+      if (activeStartedAt === null) {
         activeStartedAt = Date.now();
       }
     } else {
@@ -615,9 +618,14 @@
       return;
     }
 
-    activeArticle.progress.completed = !activeArticle.progress.completed;
+    const willComplete = !activeArticle.progress.completed;
+    if (willComplete) {
+      flushLearningTime();
+    }
+    activeArticle.progress.completed = willComplete;
     writeArticleProgress(activeArticle.id, activeArticle.progress);
     renderArticleProgress();
+    updateLearningTimer();
   });
 
   window.$docsify = window.$docsify || {};
