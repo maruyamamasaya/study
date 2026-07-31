@@ -14,11 +14,17 @@
   "API Routes 調査結果": [
     "作業ログ/yasukari/API Routes 調査結果"
   ],
+  "AWS Amplifyとは？": [
+    "記事：基礎編/基礎AWS/AWS Amplifyとは？"
+  ],
   "AWS Certificate Manager（ACM）": [
     "記事：基礎編/基礎AWS/AWS Certificate Manager（ACM）"
   ],
   "AWS Lambdaとは？": [
     "記事：基礎編/基礎AWS/AWS Lambdaとは？"
+  ],
+  "AWS からGCへの移行はできるか？": [
+    "記事：基礎編/AWS からGCへの移行はできるか？"
   ],
   "AWSにおけるAZ": [
     "記事：基礎編/基礎AWS/AWSにおけるAZ"
@@ -31,6 +37,9 @@
   ],
   "AWS接続調査結果": [
     "作業ログ/yasukari/AWS接続調査結果"
+  ],
+  "AZ": [
+    "記事：基礎編/基礎AWS/AZ"
   ],
   "Amazon API Gateway とは？": [
     "記事：基礎編/基礎AWS/Amazon API Gateway とは？"
@@ -61,6 +70,12 @@
   ],
   "Amazon S3（Simple Storage Service）": [
     "記事：基礎編/基礎AWS/Amazon S3（Simple Storage Service）"
+  ],
+  "Amazon SES（Simple Email Service）": [
+    "記事：基礎編/基礎AWS/Amazon SES（Simple Email Service）"
+  ],
+  "Amazon VPCとは？": [
+    "記事：基礎編/基礎AWS/Amazon VPCとは？"
   ],
   "App Router": [
     "用語解説/App Router"
@@ -94,6 +109,9 @@
   ],
   "Context（共通データ）": [
     "記事：実践編/React編/Context（共通データ）"
+  ],
+  "Cursor": [
+    "用語解説/Cursor"
   ],
   "DNS設定": [
     "用語解説/DNS設定"
@@ -143,6 +161,9 @@
   ],
   "HTTPS と認証 基礎編": [
     "記事：基礎編/HTTPS と認証 基礎編"
+  ],
+  "Homebrew": [
+    "用語解説/Homebrew"
   ],
   "Hooks（便利機能）": [
     "記事：実践編/React編/Hooks（便利機能）"
@@ -194,6 +215,9 @@
   ],
   "Markdown記法のサンプル集": [
     "移管用/Obsidianが最高のメモ/フォルダ管理/Markdown記法のサンプル集"
+  ],
+  "Multi-AZ": [
+    "記事：基礎編/基礎AWS/Multi-AZ"
   ],
   "Nest.js と Next.js の違い": [
     "記事：基礎編/Nest.js と Next.js の違い"
@@ -264,6 +288,9 @@
   "SSH設定": [
     "用語解説/SSH設定"
   ],
+  "Sandbox（サンドボックス）": [
+    "用語解説/Sandbox（サンドボックス）"
+  ],
   "Session（セッション）基礎編": [
     "記事：基礎編/Session（セッション）基礎編"
   ],
@@ -273,6 +300,12 @@
   "Suspense・Lazy（遅延読み込み）": [
     "記事：実践編/React編/Suspense・Lazy（遅延読み込み）"
   ],
+  "Terraformとは？": [
+    "記事：基礎編/Terraformとは？"
+  ],
+  "Terraformの基本的な流れ": [
+    "記事：基礎編/Terraformの基本的な流れ"
+  ],
   "TypeScript 基礎編　 ― JavaScriptを「安全に書く」ための言語 ―": [
     "記事：基礎編/TypeScript 基礎編　 ― JavaScriptを「安全に書く」ための言語 ―"
   ],
@@ -281,6 +314,9 @@
   ],
   "TypeScriptまとめ": [
     "保管用・未リンク/TypeScriptまとめ"
+  ],
+  "VS Code（Visual Studio Code）": [
+    "用語解説/VS Code（Visual Studio Code）"
   ],
   "WebサイトへGoogleタグ（GTM）・GA4を組み込む際に気を付けたこと・工夫したこと": [
     "記事：実務編/WebサイトへGoogleタグ（GTM）・GA4を組み込む際に気を付けたこと・工夫したこと"
@@ -432,6 +468,12 @@
   "パーティション作成": [
     "用語解説/パーティション作成"
   ],
+  "フェイルオーバーとは？": [
+    "記事：基礎編/基礎AWS/フェイルオーバーとは？"
+  ],
+  "フェイルバック": [
+    "記事：基礎編/基礎AWS/フェイルバック"
+  ],
   "フロントエンドエンジニアに必要なスキル": [
     "記事：基礎編/フロントエンドエンジニアに必要なスキル"
   ],
@@ -443,6 +485,9 @@
   ],
   "マーケティングファネル": [
     "用語解説/マーケティングファネル"
+  ],
+  "メール配信の仕組み": [
+    "記事：基礎編/基礎AWS/メール配信の仕組み"
   ],
   "モバイルアプリ開発でよく使われる技術スタック一覧": [
     "記事：実務編/モバイルアプリ開発でよく使われる技術スタック一覧"
@@ -467,6 +512,9 @@
   ],
   "保育園見学チェックリスト１": [
     "臨時フォルダ/保育園見学チェックリスト１"
+  ],
+  "冗長化": [
+    "記事：基礎編/基礎AWS/冗長化"
   ],
   "南大井保育園": [
     "南大井保育園"
@@ -537,7 +585,11 @@
   "集客チャネル": [
     "用語解説/集客チャネル"
   ],
+  "高可用性・HA": [
+    "記事：基礎編/基礎AWS/高可用性・HA"
+  ],
   "🌟AWS基礎について": [
+    "記事：基礎編/基礎AWS/🌟AWS基礎について",
     "🌟AWS基礎について"
   ],
   "🌟Obsidianが最高のメモツールである理由": [
