@@ -27,6 +27,7 @@
 [[Docker基礎編：インフラエンジニアが知っておきたいコンテナの仕組み|Docker基礎編]]
 [[CI／CD基礎編：開発・テスト・デプロイを自動化する仕組み|CI／CD基礎編]]
 →[[GitHub Actions]]
+[[GitHub Pages]]
 
 [[🌟AWS基礎について]]
 
@@ -34,6 +35,7 @@ LaC（インフラをプログラムコードとして管理する）
 [[Terraformとは？]]
 →[[Terraformの基本的な流れ]]
 [[AWS からGCへの移行はできるか？]]
+[[Terraformの基本コード入門]]
 
 ---
 ### 基礎編 - フロント
@@ -57,7 +59,15 @@ LaC（インフラをプログラムコードとして管理する）
 [[VS Code（Visual Studio Code）]]
 [[Cursor]]
 
+パッケージマネージャー
 [[Homebrew]]
+→[[Linuxでいう apt や yum]]
+[[npmとは？]]
+
+python
+[[pipとは？]]
+[[Pythonでよく使われるライブラリ]]
+→[[ライブラリはどこに保存される？]]
 
 ---
 ### 実践編 - フロント

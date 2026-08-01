@@ -2,9 +2,9 @@
   "version": 1,
   "articles": [
     {
-      "id": "4e397fa0-31b4-444c-9d85-314806effb1e",
-      "path": "にじいろ保育園.md",
-      "title": "にじいろ保育園"
+      "id": "0d295460-ca1d-43c9-8cf2-40c4bca9756f",
+      "path": "にじいろ保育園.md",
+      "title": "にじいろ保育園"
     },
     {
       "id": "54a50477-0dd2-4efe-b8e0-6001765f3c82",
@@ -417,6 +417,11 @@
       "title": "GitHub Actions"
     },
     {
+      "id": "5cfb5135-d14d-4ee1-aebd-ae448a03ed14",
+      "path": "記事：基礎編/GitHub Pages.md",
+      "title": "GitHub Pages"
+    },
+    {
       "id": "09037c3f-2771-4761-9f92-86b9f61131c0",
       "path": "記事：基礎編/Go言語とは？.md",
       "title": "Go言語とは？"
@@ -430,6 +435,11 @@
       "id": "0926e844-a323-492d-8732-ddb9d8a19ed1",
       "path": "記事：基礎編/JavaScript 基礎編 ― Webページを「動かす」ためのプログラミング言語 ―.md",
       "title": "JavaScript 基礎編 ― Webページを「動かす」ためのプログラミング言語 ―"
+    },
+    {
+      "id": "1c84b56d-1735-479a-ac93-ee0fa01ef321",
+      "path": "記事：基礎編/Linuxでいう apt や yum.md",
+      "title": "Linuxでいう apt や yum"
     },
     {
       "id": "a0f794b7-c321-427f-8b39-66e24b90b6b3",
@@ -457,6 +467,11 @@
       "title": "Node.js 基礎編 ― JavaScriptを「ブラウザの外」で動かすための実行環境 ―"
     },
     {
+      "id": "8d8096c2-5f1b-4a1f-9531-31686f41c1b0",
+      "path": "記事：基礎編/Pythonでよく使われるライブラリ.md",
+      "title": "Pythonでよく使われるライブラリ"
+    },
+    {
       "id": "1faf5260-8151-42d6-ac34-51f8a7e0ebbe",
       "path": "記事：基礎編/React 基礎編 ― Web画面を「部品」に分けて作るためのライブラリ ―.md",
       "title": "React 基礎編 ― Web画面を「部品」に分けて作るためのライブラリ ―"
@@ -477,6 +492,11 @@
       "title": "Terraformとは？"
     },
     {
+      "id": "88a412b9-93bb-493b-8879-780fe67636f5",
+      "path": "記事：基礎編/Terraformの基本コード入門.md",
+      "title": "Terraformの基本コード入門"
+    },
+    {
       "id": "46ef731d-7b17-44b2-b0b5-036e4979498b",
       "path": "記事：基礎編/Terraformの基本的な流れ.md",
       "title": "Terraformの基本的な流れ"
@@ -495,6 +515,16 @@
       "id": "d4cef7ff-d867-4e1a-a1e7-f7eab2cf794c",
       "path": "記事：基礎編/Webセキュリティ基礎編.md",
       "title": "Webセキュリティ基礎編"
+    },
+    {
+      "id": "2e1594a9-591a-41a6-bbb2-3f94ae4a62c3",
+      "path": "記事：基礎編/npmとは？.md",
+      "title": "npmとは？"
+    },
+    {
+      "id": "8d282c18-e7d1-4700-9150-e1e261c5f3ca",
+      "path": "記事：基礎編/pipとは？.md",
+      "title": "pipとは？"
     },
     {
       "id": "7c7658d0-b576-42ec-b53c-5f0a6d33f641",
@@ -560,6 +590,11 @@
       "id": "6af07817-2931-4057-ba60-8777bfd8e713",
       "path": "記事：基礎編/フロントエンドエンジニアに必要なスキル.md",
       "title": "フロントエンドエンジニアに必要なスキル"
+    },
+    {
+      "id": "0c3bdbcf-080c-407a-8a93-359950bb6667",
+      "path": "記事：基礎編/ライブラリはどこに保存される？.md",
+      "title": "ライブラリはどこに保存される？"
     },
     {
       "id": "9fba880f-db40-47f1-84b2-0fabc1ca9000",
