@@ -1,3 +1,4 @@
+
 ## 1. Subdomain Takeoverとは
 
 **Subdomain Takeover**とは、

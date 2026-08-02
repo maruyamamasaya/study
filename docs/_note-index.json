@@ -336,6 +336,9 @@
   "TypeScript 基礎編　 ― JavaScriptを「安全に書く」ための言語 ―": [
     "記事：基礎編/TypeScript 基礎編　 ― JavaScriptを「安全に書く」ための言語 ―"
   ],
+  "TypeScriptの型におけるJSXサポート": [
+    "記事：実践編/TypeScriptの型におけるJSXサポート"
+  ],
   "TypeScriptの設計思想と `enum` を理解する": [
     "記事：実践編/TypeScriptの設計思想と `enum` を理解する"
   ],

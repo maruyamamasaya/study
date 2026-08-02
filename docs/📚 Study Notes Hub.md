@@ -88,6 +88,7 @@ python
 ### 実践編 - フロント
 [[TypeScriptの設計思想と `enum` を理解する]]
 [[npm test・lint・Gitコミットの関係]]
+[[TypeScriptの型におけるJSXサポート]]
 
 実践編 - インフラ
 
