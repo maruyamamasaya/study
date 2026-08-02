@@ -87,6 +87,14 @@
     return remainder + '秒';
   }
 
+  function formatOverallLearningTime(seconds) {
+    const totalMinutes = Math.floor(Math.max(0, Number(seconds) || 0) / 60);
+    const hours = Math.floor(totalMinutes / 60);
+    const minutes = totalMinutes % 60;
+
+    return hours + '時間 ' + minutes + '分';
+  }
+
   function calculateOverallProgress(articles) {
     const articleProgress = articles
       .filter(function (article) {
@@ -98,7 +106,6 @@
     const completedCount = articleProgress.filter(function (progress) {
       return progress.completed;
     }).length;
-    const unreadCount = articleProgress.length - completedCount;
     const totalLearningSeconds = articleProgress.reduce(function (total, progress) {
       const learningSeconds = Number(progress.learningSeconds);
       return total + (Number.isFinite(learningSeconds) && learningSeconds > 0 ? learningSeconds : 0);
@@ -109,7 +116,7 @@
 
     return {
       completedCount: completedCount,
-      unreadCount: unreadCount,
+      totalCount: articleProgress.length,
       totalLearningSeconds: totalLearningSeconds,
       completionRate: completionRate
     };
@@ -126,20 +133,12 @@
     }
 
     const overallProgress = calculateOverallProgress(master.articles || []);
-    let summary = meta.querySelector('.reader-overall-progress');
-    if (!summary) {
-      summary = document.createElement('span');
-      summary.className = 'reader-overall-progress';
-      meta.appendChild(summary);
-    }
-
-    summary.innerHTML =
-      '<span class="reader-stat">合計時間 ' +
-        formatLearningTime(overallProgress.totalLearningSeconds) +
+    meta.innerHTML =
+      '<span class="reader-stat">合計時間: ' +
+        formatOverallLearningTime(overallProgress.totalLearningSeconds) +
       '</span>' +
-      '<span class="reader-stat">読了率 ' + overallProgress.completionRate + '%</span>' +
-      '<span class="reader-stat">読了 ' + overallProgress.completedCount + '件</span>' +
-      '<span class="reader-stat">未読 ' + overallProgress.unreadCount + '件</span>';
+      '<span class="reader-stat">読了率 ' + overallProgress.completionRate + '% (' +
+        overallProgress.completedCount + '/' + overallProgress.totalCount + ')</span>';
   }
 
   function renderArticleProgress() {
