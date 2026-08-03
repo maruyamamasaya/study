@@ -156,6 +156,84 @@
     learningTime.textContent = '学習 ' + formatLearningTime(progress.learningSeconds);
   }
 
+  function createLearningTimeEditor() {
+    let dialog = document.querySelector('.reader-time-dialog');
+    if (dialog) {
+      return dialog;
+    }
+
+    dialog = document.createElement('dialog');
+    dialog.className = 'reader-time-dialog';
+    dialog.setAttribute('aria-labelledby', 'reader-time-dialog-title');
+    dialog.innerHTML =
+      '<form method="dialog" class="reader-time-dialog__form">' +
+        '<h2 id="reader-time-dialog-title">勉強時間を編集</h2>' +
+        '<div class="reader-time-dialog__inputs">' +
+          '<label><span>時間</span><input name="hours" type="number" min="0" max="9999" required></label>' +
+          '<label><span>分</span><input name="minutes" type="number" min="0" max="59" required></label>' +
+          '<label><span>秒</span><input name="seconds" type="number" min="0" max="59" required></label>' +
+        '</div>' +
+        '<p class="reader-time-dialog__error" role="alert" hidden>0以上の時間と、0〜59の分・秒を入力してください。</p>' +
+        '<div class="reader-time-dialog__actions">' +
+          '<button type="button" value="cancel">キャンセル</button>' +
+          '<button type="submit" value="save">保存</button>' +
+        '</div>' +
+      '</form>';
+    document.body.appendChild(dialog);
+
+    dialog.querySelector('[value="cancel"]').addEventListener('click', function () {
+      dialog.close();
+    });
+    dialog.addEventListener('click', function (event) {
+      if (event.target === dialog) {
+        dialog.close();
+      }
+    });
+    dialog.addEventListener('close', updateLearningTimer);
+    dialog.querySelector('form').addEventListener('submit', function (event) {
+      event.preventDefault();
+      const hours = Number(dialog.querySelector('[name="hours"]').value);
+      const minutes = Number(dialog.querySelector('[name="minutes"]').value);
+      const seconds = Number(dialog.querySelector('[name="seconds"]').value);
+      const isValid = Number.isInteger(hours) && hours >= 0 && hours <= 9999 &&
+        Number.isInteger(minutes) && minutes >= 0 && minutes <= 59 &&
+        Number.isInteger(seconds) && seconds >= 0 && seconds <= 59;
+
+      dialog.querySelector('.reader-time-dialog__error').hidden = isValid;
+      if (!isValid || !activeArticle) {
+        return;
+      }
+
+      activeArticle.progress.learningSeconds = (hours * 3600) + (minutes * 60) + seconds;
+      writeArticleProgress(activeArticle.id, activeArticle.progress);
+      renderArticleProgress();
+      dialog.close();
+      loadArticleMaster().then(renderHomepageProgress).catch(function (error) {
+        console.warn('[Reader progress]', error);
+      });
+      updateLearningTimer();
+    });
+
+    return dialog;
+  }
+
+  function openLearningTimeEditor() {
+    if (!activeArticle) {
+      return;
+    }
+
+    flushLearningTime();
+    activeStartedAt = null;
+    const totalSeconds = Math.max(0, Math.floor(activeArticle.progress.learningSeconds));
+    const dialog = createLearningTimeEditor();
+    dialog.querySelector('[name="hours"]').value = Math.floor(totalSeconds / 3600);
+    dialog.querySelector('[name="minutes"]').value = Math.floor((totalSeconds % 3600) / 60);
+    dialog.querySelector('[name="seconds"]').value = totalSeconds % 60;
+    dialog.querySelector('.reader-time-dialog__error').hidden = true;
+    dialog.showModal();
+    dialog.querySelector('[name="hours"]').focus();
+  }
+
   function flushLearningTime() {
     if (!activeArticle || activeArticle.progress.completed || activeStartedAt === null) {
       return;
@@ -321,7 +399,10 @@
     return (
       '<nav class="reader-meta" aria-label="記事情報">' +
         '<button class="reader-completion" type="button" aria-pressed="false">○ 未読了</button>' +
-        '<span class="reader-stat reader-learning-time">学習 0秒</span>' +
+        '<span class="reader-stat reader-learning-time-wrap">' +
+          '<span class="reader-learning-time">学習 0秒</span>' +
+          '<button class="reader-time-edit" type="button" aria-label="勉強時間を編集" title="勉強時間を編集">✎</button>' +
+        '</span>' +
         '<span class="reader-stat" title="1分あたり約500文字で計算">' +
           '<span aria-hidden="true">◷</span> 約' + readingMinutes + '分' +
         '</span>' +
@@ -669,6 +750,11 @@
   }
 
   document.addEventListener('click', function (event) {
+    if (event.target.closest('.reader-time-edit')) {
+      openLearningTimeEditor();
+      return;
+    }
+
     if (!event.target.classList.contains('reader-completion') || !activeArticle) {
       return;
     }
