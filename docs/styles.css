@@ -340,6 +340,117 @@ body .markdown-section h4 a:focus-visible {
   color: var(--accent);
 }
 
+.reader-time-edit {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 4px;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 0.85rem;
+  justify-content: center;
+  line-height: 1;
+  padding: 0.18rem;
+}
+
+.reader-time-edit:hover,
+.reader-time-edit:focus-visible {
+  background: var(--accent-soft);
+  color: var(--accent);
+  outline: none;
+}
+
+.reader-time-dialog {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  max-width: calc(100vw - 2rem);
+  padding: 0;
+  width: 24rem;
+}
+
+.reader-time-dialog::backdrop {
+  background: rgba(0, 0, 0, 0.68);
+}
+
+.reader-time-dialog__form {
+  padding: 1.25rem;
+}
+
+.reader-time-dialog__form h2 {
+  color: var(--heading);
+  font-size: 1.15rem;
+  margin: 0 0 1rem;
+}
+
+.reader-time-dialog__inputs {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.reader-time-dialog__inputs label {
+  color: var(--muted);
+  display: grid;
+  font-size: 0.75rem;
+  gap: 0.3rem;
+}
+
+.reader-time-dialog__inputs input {
+  background: var(--page-bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font: inherit;
+  font-size: 1rem;
+  min-width: 0;
+  padding: 0.55rem;
+  width: 100%;
+}
+
+.reader-time-dialog__inputs input:focus {
+  border-color: var(--accent);
+  outline: 1px solid var(--accent);
+}
+
+.reader-time-dialog__error {
+  color: #ff8a8a;
+  font-size: 0.75rem;
+  margin: 0.75rem 0 0;
+}
+
+.reader-time-dialog__actions {
+  display: flex;
+  gap: 0.6rem;
+  justify-content: flex-end;
+  margin-top: 1.25rem;
+}
+
+.reader-time-dialog__actions button {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  padding: 0.45rem 0.8rem;
+}
+
+.reader-time-dialog__actions button[type="submit"] {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.reader-time-dialog__actions button:hover,
+.reader-time-dialog__actions button:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+}
+
 .reader-navigation {
   align-items: center;
   background: rgba(9, 13, 18, 0.94);
