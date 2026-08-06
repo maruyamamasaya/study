@@ -130,6 +130,21 @@
 
     const currentSeconds = Number(current.learningSeconds);
     const importedSeconds = Number(imported.learningSeconds);
+    const currentCompletedUpdatedAt = parseTimestamp(current.completedUpdatedAt);
+    const importedCompletedUpdatedAt = parseTimestamp(imported.completedUpdatedAt);
+    let completed = Boolean(current.completed || imported.completed);
+    let completedUpdatedAt = null;
+
+    if (currentCompletedUpdatedAt !== null || importedCompletedUpdatedAt !== null) {
+      if (importedCompletedUpdatedAt !== null &&
+          (currentCompletedUpdatedAt === null || importedCompletedUpdatedAt > currentCompletedUpdatedAt)) {
+        completed = Boolean(imported.completed);
+        completedUpdatedAt = imported.completedUpdatedAt;
+      } else {
+        completed = Boolean(current.completed);
+        completedUpdatedAt = current.completedUpdatedAt;
+      }
+    }
     const latestViewedAt = [current.lastViewedAt, imported.lastViewedAt]
       .filter(function (value) {
         return typeof value === 'string' && !Number.isNaN(Date.parse(value));
@@ -139,7 +154,8 @@
 
     return JSON.stringify({
       version: Math.max(Number(current.version) || 1, Number(imported.version) || 1),
-      completed: Boolean(current.completed || imported.completed),
+      completed: completed,
+      completedUpdatedAt: completedUpdatedAt,
       // Both totals may contain the same study session. Taking the larger total
       // preserves progress without double-counting overlapping backups.
       learningSeconds: Math.max(
@@ -148,6 +164,14 @@
       ),
       lastViewedAt: latestViewedAt
     });
+  }
+
+  function parseTimestamp(value) {
+    if (typeof value !== 'string') {
+      return null;
+    }
+    const timestamp = Date.parse(value);
+    return Number.isNaN(timestamp) ? null : timestamp;
   }
 
   function applyBackup(records, mode) {
@@ -232,6 +256,7 @@
     const defaults = {
       version: 1,
       completed: false,
+      completedUpdatedAt: null,
       learningSeconds: 0,
       lastViewedAt: null
     };
@@ -971,6 +996,7 @@
       flushLearningTime();
     }
     activeArticle.progress.completed = willComplete;
+    activeArticle.progress.completedUpdatedAt = new Date().toISOString();
     writeArticleProgress(activeArticle.id, activeArticle.progress);
     renderArticleProgress();
     loadArticleMaster().then(renderHomepageProgress).catch(function (error) {
