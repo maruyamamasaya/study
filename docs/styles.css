@@ -830,6 +830,38 @@ body .markdown-section .reader-backup__home:focus-visible {
   margin-right: 0.4rem;
 }
 
+/* Keep the desktop chrome compact while preserving the existing, touch-friendly
+ * sizing below for phones. */
+@media (min-width: 601px) {
+  .reader-header {
+    padding-bottom: 0.55rem;
+    padding-top: 0.55rem;
+  }
+
+  .reader-header__title {
+    font-size: 0.78rem;
+  }
+
+  .reader-meta {
+    bottom: calc(3rem + 0.75rem);
+  }
+
+  .reader-navigation {
+    grid-template-columns: repeat(5, minmax(3.25rem, 1fr));
+    max-width: 28rem;
+  }
+
+  .reader-navigation__button {
+    font-size: 0.65rem;
+    min-height: 3rem;
+    padding: 0.3rem;
+  }
+
+  .reader-navigation__icon {
+    font-size: 1rem;
+  }
+}
+
 @media (max-width: 600px) {
   body {
     font-size: calc(13.5px + 1pt);
