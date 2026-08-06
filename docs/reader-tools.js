@@ -6,6 +6,10 @@
   const HOMEPAGE_FILE = '📚 Study Notes Hub.md';
   const ARTICLE_MASTER_FILE = '_article-master.json';
   const ARTICLE_STORAGE_PREFIX = 'study-notes:article:';
+  const CHECKLIST_STORAGE_PREFIX = 'study-notes-checklist::';
+  const BACKUP_PAGE_FILE = 'バックアップ・復元.md';
+  const BACKUP_FORMAT = 'study-notes-backup';
+  const BACKUP_VERSION = 1;
   let noteIndexPromise = null;
   let articleMasterPromise = null;
   let activeArticle = null;
@@ -47,10 +51,229 @@
     return ARTICLE_STORAGE_PREFIX + articleId;
   }
 
+  function isStudyRecordKey(key) {
+    return key.indexOf(ARTICLE_STORAGE_PREFIX) === 0 ||
+      key.indexOf(CHECKLIST_STORAGE_PREFIX) === 0;
+  }
+
+  function readAllStudyRecords() {
+    const records = {};
+
+    for (let index = 0; index < window.localStorage.length; index += 1) {
+      const key = window.localStorage.key(index);
+      if (key && isStudyRecordKey(key)) {
+        records[key] = window.localStorage.getItem(key);
+      }
+    }
+
+    return records;
+  }
+
+  function parseBackupFile(text) {
+    const backup = JSON.parse(text);
+    if (!backup || backup.format !== BACKUP_FORMAT || backup.version !== BACKUP_VERSION ||
+        !backup.records || typeof backup.records !== 'object' || Array.isArray(backup.records)) {
+      throw new Error('このサイトのバックアップファイルではありません。');
+    }
+
+    const records = {};
+    Object.keys(backup.records).forEach(function (key) {
+      if (!isStudyRecordKey(key) || typeof backup.records[key] !== 'string') {
+        throw new Error('バックアップに不正な学習記録が含まれています。');
+      }
+      if (key.indexOf(ARTICLE_STORAGE_PREFIX) === 0) {
+        const progress = JSON.parse(backup.records[key]);
+        const learningSeconds = Number(progress && progress.learningSeconds);
+        if (!progress || typeof progress !== 'object' ||
+            typeof progress.completed !== 'boolean' ||
+            !Number.isFinite(learningSeconds) || learningSeconds < 0) {
+          throw new Error('バックアップの記事記録が不正です。');
+        }
+      } else if (backup.records[key] !== 'true') {
+        throw new Error('バックアップのチェック記録が不正です。');
+      }
+      records[key] = backup.records[key];
+    });
+    return records;
+  }
+
+  function createBackup() {
+    flushLearningTime();
+    const exportedAt = new Date();
+    const backup = {
+      format: BACKUP_FORMAT,
+      version: BACKUP_VERSION,
+      exportedAt: exportedAt.toISOString(),
+      records: readAllStudyRecords()
+    };
+    const timestamp = exportedAt.toISOString().replace(/[:.]/g, '-');
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([
+      JSON.stringify(backup, null, 2)
+    ], { type: 'application/json' }));
+    link.download = 'study-notes-backup-' + timestamp + '.json';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(function () {
+      URL.revokeObjectURL(link.href);
+    }, 0);
+    showBackupStatus('バックアップをダウンロードしました。', false);
+  }
+
+  function mergeArticleRecord(currentValue, importedValue) {
+    const current = JSON.parse(currentValue || '{}');
+    const imported = JSON.parse(importedValue);
+    if (!current || typeof current !== 'object' || !imported || typeof imported !== 'object') {
+      throw new Error('記事の学習記録が不正です。');
+    }
+
+    const currentSeconds = Number(current.learningSeconds);
+    const importedSeconds = Number(imported.learningSeconds);
+    const currentCompletedUpdatedAt = parseTimestamp(current.completedUpdatedAt);
+    const importedCompletedUpdatedAt = parseTimestamp(imported.completedUpdatedAt);
+    let completed = Boolean(current.completed || imported.completed);
+    let completedUpdatedAt = null;
+
+    if (currentCompletedUpdatedAt !== null || importedCompletedUpdatedAt !== null) {
+      if (importedCompletedUpdatedAt !== null &&
+          (currentCompletedUpdatedAt === null || importedCompletedUpdatedAt > currentCompletedUpdatedAt)) {
+        completed = Boolean(imported.completed);
+        completedUpdatedAt = imported.completedUpdatedAt;
+      } else {
+        completed = Boolean(current.completed);
+        completedUpdatedAt = current.completedUpdatedAt;
+      }
+    }
+    const latestViewedAt = [current.lastViewedAt, imported.lastViewedAt]
+      .filter(function (value) {
+        return typeof value === 'string' && !Number.isNaN(Date.parse(value));
+      })
+      .sort()
+      .pop() || null;
+
+    return JSON.stringify({
+      version: Math.max(Number(current.version) || 1, Number(imported.version) || 1),
+      completed: completed,
+      completedUpdatedAt: completedUpdatedAt,
+      // Both totals may contain the same study session. Taking the larger total
+      // preserves progress without double-counting overlapping backups.
+      learningSeconds: Math.max(
+        Number.isFinite(currentSeconds) && currentSeconds > 0 ? currentSeconds : 0,
+        Number.isFinite(importedSeconds) && importedSeconds > 0 ? importedSeconds : 0
+      ),
+      lastViewedAt: latestViewedAt
+    });
+  }
+
+  function parseTimestamp(value) {
+    if (typeof value !== 'string') {
+      return null;
+    }
+    const timestamp = Date.parse(value);
+    return Number.isNaN(timestamp) ? null : timestamp;
+  }
+
+  function applyBackup(records, mode) {
+    if (mode === 'overwrite') {
+      Object.keys(readAllStudyRecords()).forEach(function (key) {
+        window.localStorage.removeItem(key);
+      });
+      Object.keys(records).forEach(function (key) {
+        window.localStorage.setItem(key, records[key]);
+      });
+      return;
+    }
+
+    Object.keys(records).forEach(function (key) {
+      const currentValue = window.localStorage.getItem(key);
+      if (key.indexOf(ARTICLE_STORAGE_PREFIX) === 0) {
+        window.localStorage.setItem(key, mergeArticleRecord(currentValue, records[key]));
+      } else if (records[key] === 'true' || currentValue === 'true') {
+        window.localStorage.setItem(key, 'true');
+      }
+    });
+  }
+
+  function clearAllStudyRecords() {
+    const confirmed = window.confirm(
+      '学習記録をすべてクリアします。バックアップは取得済みですか？\n\n' +
+      'この操作は取り消せません。問題なければ「OK」を押してください。'
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    Object.keys(readAllStudyRecords()).forEach(function (key) {
+      window.localStorage.removeItem(key);
+    });
+    window.alert('この端末の学習記録をクリアしました。');
+    window.location.reload();
+  }
+
+  function showBackupStatus(message, isError) {
+    const status = document.querySelector('.reader-backup__status');
+    if (!status) {
+      return;
+    }
+    status.textContent = message;
+    status.classList.toggle('is-error', Boolean(isError));
+  }
+
+  function chooseBackupFile(mode) {
+    const input = document.querySelector('.reader-backup__file');
+    input.dataset.mode = mode;
+    input.value = '';
+    input.click();
+  }
+
+  function importSelectedBackup(input) {
+    const file = input.files && input.files[0];
+    const mode = input.dataset.mode;
+    if (!file) {
+      return;
+    }
+    if (mode === 'overwrite' && !window.confirm('現在の記録が上書きされます。復元しますか？')) {
+      return;
+    }
+
+    file.text().then(function (text) {
+      const records = parseBackupFile(text);
+      applyBackup(records, mode);
+      window.alert(mode === 'overwrite' ? 'バックアップから復元しました。' : '別端末の記録をマージしました。');
+      window.location.reload();
+    }).catch(function (error) {
+      showBackupStatus(error.message || 'バックアップを読み込めませんでした。', true);
+    });
+  }
+
+  function enableBackupPage() {
+    if (getCurrentNotePath() !== BACKUP_PAGE_FILE) {
+      return;
+    }
+    const panel = document.querySelector('.reader-backup');
+    if (!panel || panel.dataset.ready) {
+      return;
+    }
+    panel.dataset.ready = 'true';
+    panel.querySelector('[data-backup-action="download"]').addEventListener('click', createBackup);
+    panel.querySelector('[data-backup-action="overwrite"]').addEventListener('click', function () {
+      chooseBackupFile('overwrite');
+    });
+    panel.querySelector('[data-backup-action="merge"]').addEventListener('click', function () {
+      chooseBackupFile('merge');
+    });
+    panel.querySelector('[data-backup-action="clear"]').addEventListener('click', clearAllStudyRecords);
+    panel.querySelector('.reader-backup__file').addEventListener('change', function () {
+      importSelectedBackup(this);
+    });
+  }
+
   function readArticleProgress(articleId) {
     const defaults = {
       version: 1,
       completed: false,
+      completedUpdatedAt: null,
       learningSeconds: 0,
       lastViewedAt: null
     };
@@ -98,7 +321,7 @@
   function calculateOverallProgress(articles) {
     const articleProgress = articles
       .filter(function (article) {
-        return article.path !== HOMEPAGE_FILE;
+        return article.path !== HOMEPAGE_FILE && article.path !== BACKUP_PAGE_FILE;
       })
       .map(function (article) {
         return readArticleProgress(article.id);
@@ -281,6 +504,10 @@
     activeArticle = null;
     activeStartedAt = null;
 
+    if (requestedPath === BACKUP_PAGE_FILE) {
+      return;
+    }
+
     loadArticleMaster().then(function (master) {
       if (sequence !== articleLoadSequence) {
         return;
@@ -384,6 +611,9 @@
   }
 
   function createReaderMeta(content) {
+    if (getCurrentNotePath() === BACKUP_PAGE_FILE) {
+      return content;
+    }
     const temporaryElement = document.createElement('div');
     temporaryElement.innerHTML = content;
 
@@ -415,7 +645,9 @@
   }
 
   function createReaderNavigation() {
-    if (document.querySelector('.reader-navigation')) {
+    const existingNavigation = document.querySelector('.reader-navigation');
+    if (existingNavigation) {
+      updateReaderNavigation(existingNavigation);
       return;
     }
 
@@ -442,7 +674,12 @@
       '<button class="reader-navigation__button reader-forward" type="button">' +
         '<span class="reader-navigation__icon" aria-hidden="true">→</span>' +
         '<span>次に進む</span>' +
-      '</button>';
+      '</button>' +
+      '<a class="reader-navigation__button reader-backup-link" href="#/' +
+        encodeNotePath(BACKUP_PAGE_FILE) + '">' +
+        '<span class="reader-navigation__icon" aria-hidden="true">⇅</span>' +
+        '<span>バックアップ・復元</span>' +
+      '</a>';
 
     document.body.appendChild(navigation);
 
@@ -464,6 +701,17 @@
     navigation.querySelector('.reader-forward').addEventListener('click', function () {
       window.history.forward();
     });
+    updateReaderNavigation(navigation);
+  }
+
+  function updateReaderNavigation(navigation) {
+    const isHomepage = getCurrentNotePath() === HOMEPAGE_FILE;
+    navigation.classList.toggle('is-homepage', isHomepage);
+    navigation.querySelectorAll('.reader-navigation__button:not(.reader-backup-link)')
+      .forEach(function (button) {
+        button.hidden = isHomepage;
+      });
+    navigation.querySelector('.reader-backup-link').hidden = !isHomepage;
   }
 
   function closeSearch() {
@@ -743,6 +991,7 @@
       updateTableOfContents();
       enableCodeBlockCopying();
       enablePersistentChecklists();
+      enableBackupPage();
       initializeArticleProgress();
       enableLearningTimer();
       closeTableOfContents();
@@ -764,6 +1013,7 @@
       flushLearningTime();
     }
     activeArticle.progress.completed = willComplete;
+    activeArticle.progress.completedUpdatedAt = new Date().toISOString();
     writeArticleProgress(activeArticle.id, activeArticle.progress);
     renderArticleProgress();
     loadArticleMaster().then(renderHomepageProgress).catch(function (error) {
