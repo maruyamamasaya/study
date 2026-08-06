@@ -548,7 +548,7 @@ body .markdown-section .reader-backup__item h2 {
 }
 
 .reader-backup__item button,
-.reader-backup__home {
+body .markdown-section .reader-backup__home {
   background: var(--accent);
   border: 0;
   border-radius: 8px;
@@ -563,8 +563,8 @@ body .markdown-section .reader-backup__item h2 {
 
 .reader-backup__item button:hover,
 .reader-backup__item button:focus-visible,
-.reader-backup__home:hover,
-.reader-backup__home:focus-visible {
+body .markdown-section .reader-backup__home:hover,
+body .markdown-section .reader-backup__home:focus-visible {
   background: var(--accent-hover);
   color: #07110b;
 }
@@ -577,6 +577,21 @@ body .markdown-section .reader-backup__item h2 {
 
 .reader-backup__status.is-error {
   color: #ff8d8d;
+}
+
+.reader-backup__item--danger {
+  border-color: rgba(255, 141, 141, 0.5);
+}
+
+.reader-backup__item--danger button {
+  background: #ff8d8d;
+  color: #210707;
+}
+
+.reader-backup__item--danger button:hover,
+.reader-backup__item--danger button:focus-visible {
+  background: #ffb3b3;
+  color: #210707;
 }
 
 .reader-search-dialog {

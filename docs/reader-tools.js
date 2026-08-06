@@ -195,6 +195,22 @@
     });
   }
 
+  function clearAllStudyRecords() {
+    const confirmed = window.confirm(
+      '学習記録をすべてクリアします。バックアップは取得済みですか？\n\n' +
+      'この操作は取り消せません。問題なければ「OK」を押してください。'
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    Object.keys(readAllStudyRecords()).forEach(function (key) {
+      window.localStorage.removeItem(key);
+    });
+    window.alert('この端末の学習記録をクリアしました。');
+    window.location.reload();
+  }
+
   function showBackupStatus(message, isError) {
     const status = document.querySelector('.reader-backup__status');
     if (!status) {
@@ -247,6 +263,7 @@
     panel.querySelector('[data-backup-action="merge"]').addEventListener('click', function () {
       chooseBackupFile('merge');
     });
+    panel.querySelector('[data-backup-action="clear"]').addEventListener('click', clearAllStudyRecords);
     panel.querySelector('.reader-backup__file').addEventListener('change', function () {
       importSelectedBackup(this);
     });
