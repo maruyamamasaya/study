@@ -1,312 +1,321 @@
+# Linux・Red Hat（RHEL）とは？
 
-1. Linuxとは？
+## Linuxとは？
 
-Linuxは、サーバーなどで広く使われているOSの系統です。
+Linuxは、**サーバーで広く利用されているOS（オペレーティングシステム）の系統**です。
 
-Windowsとは別のOS系統と考えると分かりやすいです。
+Windowsとは別のOSファミリーと考えると分かりやすくなります。
 
+```text
 OS
-
 ├── Windows
-
-│   ├── Windows 11
-
-│   └── Windows Server
-
+│   ├── Windows 11
+│   └── Windows Server
 │
-
 ├── Linux
-
-│   ├── Red Hat Enterprise Linux（RHEL）
-
-│   ├── Ubuntu
-
-│   ├── Debian
-
-│   ├── Rocky Linux
-
-│   └── AlmaLinux
-
+│   ├── Red Hat Enterprise Linux（RHEL）
+│   ├── Ubuntu
+│   ├── Debian
+│   ├── Rocky Linux
+│   └── AlmaLinux
 │
-
 └── その他
+    └── AIX
+```
 
-    └── AIX など
+---
 
-厳密には「Linux」はOSの中心部分であるLinuxカーネルを指します。
+## Linuxの正体
 
-このLinuxカーネルに、
+厳密には、**Linux**とはOSの中心部分である**Linuxカーネル**を指します。
 
-- コマンド
-- パッケージ管理
+しかし実際に利用するOSは、Linuxカーネルに以下のようなものを組み合わせて構成されています。
+
+- シェル（コマンド）
+- パッケージ管理システム
 - システム管理ツール
 - 各種ライブラリ
+- アプリケーション
 
-などを組み合わせて、実際に使えるOSとして提供したものをLinuxディストリビューションと呼びます。
+このように**実際に使えるOSとしてまとめたもの**を、
 
-  
+> **Linuxディストリビューション（Linux Distribution）**
 
-2. Red Hatとは？
+と呼びます。
 
-Red Hatは会社名です。
+代表例
 
-そのRed Hat社が提供している代表的なLinuxディストリビューションが、
+- Red Hat Enterprise Linux（RHEL）
+- Ubuntu
+- Debian
+- Rocky Linux
+- AlmaLinux
 
-Red Hat Enterprise Linux（RHEL）
+---
+
+# Red Hatとは？
+
+**Red Hat（レッドハット）は会社名**です。
+
+このRed Hat社が提供している企業向けLinuxが
+
+> **Red Hat Enterprise Linux（RHEL）**
 
 です。
 
 現場では省略して、
 
-「このサーバー、Red Hatです」
+> 「このサーバー、Red Hatです。」
 
 と言うことがあります。
 
-正確には、
+実際には
 
-「このサーバーのOSはRHELです」
-
-という意味です。
-
-  
-
-3. LinuxとRed Hatの違い
-
-簡単に整理すると、
-
-|   |   |
-|---|---|
-|用語|意味|
-|Linux|OSの基盤・Linux系OS全体を指す言葉としても使われる|
-|Red Hat|RHELを開発・提供している会社|
-|RHEL|Red Hat社が提供する企業向けLinux|
-|Ubuntu|別のLinuxディストリビューション|
-|Rocky Linux|別のLinuxディストリビューション|
-
-つまり、
-
-Linux
-
-  ↓
-
-いろいろなLinuxが存在する
-
-  ↓
-
-RHEL / Ubuntu / Debian / Rocky Linux...
-
-という関係です。
-
-RHELもLinuxの一種です。
-
-  
-
-4. Enterpriseとは？
-
-Enterprise（エンタープライズ）は、
-
-企業向け・大規模組織向け
-
-という意味で使われます。
-
-そのため、
-
-Red Hat
-
-Enterprise
-
-Linux
-
-をそのまま考えると、
-
-Red Hat社が提供する「企業向けLinux」
+> 「このサーバーのOSはRHELです。」
 
 という意味になります。
 
-  
+---
 
-5. なぜ企業向けLinuxが必要なのか？
+# LinuxとRed Hatの違い
 
-企業のサーバーでは、
-
-- サーバーが止まると業務が止まる
-- セキュリティ問題を放置できない
-- 何年間も安定して利用したい
-- 障害発生時にサポートしてほしい
-- アップデートを継続して提供してほしい
-
-といった要求があります。
-
-そのためRHELでは、単にLinuxを提供するだけでなく、
-
-長期サポート・セキュリティアップデート・メーカーサポート・安定した運用
-
-などが重視されています。
-
-  
-
-6. 実際のサーバーではどこにいる？
-
-例えば企業システムなら、こんな構成があります。
-
-物理サーバー
-
-    │
-
-    ▼
-
-VMware
-
-    │
-
-    ▼
-
-仮想マシン（VM）
-
-    │
-
-    ▼
-
-RHEL ← OS
-
-    │
-
-    ├── Java
-
-    ├── Apache
-
-    ├── DB
-
-    └── 業務アプリケーション
-
-RHELは、アプリケーションを動かすための土台となるOSです。
-
-  
-
-7. Windows Serverと比較すると分かりやすい
-
-例えば、
-
-サーバーA
-
-Windows Server
-
-  ↓
-
-IIS
-
-  ↓
-
-.NETアプリ
-
-という構成もあれば、
-
-サーバーB
-
-RHEL
-
-  ↓
-
-Apache / nginx
-
-  ↓
-
-Javaなどのアプリ
-
-という構成もあります。
+|用語|意味|
+|---|---|
+|Linux|OSの基盤（Linuxカーネル）。一般的にはLinux系OS全体を指すことも多い。|
+|Red Hat|RHELを開発・提供している会社|
+|RHEL|Red Hat社が提供する企業向けLinux|
+|Ubuntu|別のLinuxディストリビューション|
+|Debian|別のLinuxディストリビューション|
+|Rocky Linux|RHEL互換のLinuxディストリビューション|
+|AlmaLinux|RHEL互換のLinuxディストリビューション|
 
 つまり、
 
-Windows ServerもRHELも「サーバーで使われるOS」
-
-という点では同じレイヤーです。
-
-  
-
-8. AIXとの関係
-
-AIXもサーバー向けOSです。
-
-サーバーOS
-
-├── Windows Server
-
-├── Linux系
-
-│   ├── RHEL
-
-│   ├── Ubuntu
-
-│   └── Rocky Linux
-
-│
-
-└── UNIX系
-
-    └── AIX
-
-そのため、
-
-「以前AIXサーバーを運用していた」
-
-という経験があれば、RHELを勉強するときにも、
-
-- ファイル
-- ユーザー
-- 権限
-- プロセス
-- サービス
-- ログ
-- ネットワーク
-- シェル
-
-など、共通する考え方がかなりあります。
-
-  
-
-最低限これだけ覚える
-
+```text
 Linux
+  │
+  ├── RHEL
+  ├── Ubuntu
+  ├── Debian
+  ├── Rocky Linux
+  └── AlmaLinux
+```
 
-│
+**RHELもLinuxの一種**です。
 
-├── RHEL（Red Hat）
+---
 
-├── Ubuntu
+# Enterpriseとは？
 
-├── Debian
+**Enterprise（エンタープライズ）**とは、
 
-├── Rocky Linux
+> **企業向け・大規模組織向け**
 
-└── AlmaLinux
+という意味です。
 
-Linux
+つまり
 
-OSの基盤。一般的にはLinux系OS全体を指す言葉としても使われる。
+**Red Hat Enterprise Linux**
 
-Red Hat
+をそのまま訳すと、
 
-会社名。
+> **Red Hat社が提供する企業向けLinux**
 
+となります。
+
+---
+
+# なぜ企業向けLinuxが必要なのか？
+
+企業システムでは、
+
+- サーバー停止＝業務停止
+- セキュリティ問題を放置できない
+- 長期間安定して運用したい
+- 障害時にメーカーサポートが欲しい
+- 長期的なアップデートが必要
+
+といった要件があります。
+
+そのためRHELでは、
+
+- 長期サポート（LTS）
+- セキュリティアップデート
+- Red Hat社による技術サポート
+- 安定性・互換性の維持
+
+が重視されています。
+
+---
+
+# 実際のサーバー構成
+
+企業システムでは、以下のような構成がよくあります。
+
+```text
+物理サーバー
+      │
+      ▼
+ VMware（仮想化基盤）
+      │
+      ▼
+ 仮想マシン（VM）
+      │
+      ▼
+ RHEL（OS）
+      │
+      ├── Java
+      ├── Apache / nginx
+      ├── PostgreSQL・MySQL・Oracle
+      └── 業務アプリケーション
+```
+
+RHELは、**アプリケーションを動かすための土台となるOS**です。
+
+---
+
+# Windows Serverとの比較
+
+サーバーOSとして考えると、
+
+## Windows系
+
+```text
+Windows Server
+      │
+      ▼
+ IIS
+      │
+      ▼
+ .NETアプリ
+```
+
+---
+
+## Linux系
+
+```text
 RHEL
+      │
+      ▼
+ Apache / nginx
+      │
+      ▼
+ Java・Python・PHPなどのアプリ
+```
 
-Red Hat Enterprise Linux。
+どちらも
 
-Red Hat社が提供する企業向けLinux。
+> **サーバーOS**
 
-Enterprise
+という同じ役割を担っています。
 
-企業向け・大規模組織向けという意味。
+違うのは、
 
-  
+- Windows系なのか
+- Linux系なのか
 
-一言でまとめると
+という点です。
 
-RHELは、企業のサーバーで安心して長期間使えるよう、Red Hat社が提供・サポートしているLinux。
+---
 
-現場で「Linux経験ありますか？」と聞かれた場合、さらに
+# AIXとの関係
 
-Ubuntuですか？  
-Red Hat（RHEL）ですか？
+AIXもサーバー向けOSの一つです。
 
-のように、どのLinuxディストリビューションを使っていたのかまで確認されることがあります。
+```text
+サーバーOS
+├── Windows Server
+├── Linux系
+│   ├── RHEL
+│   ├── Ubuntu
+│   ├── Debian
+│   ├── Rocky Linux
+│   └── AlmaLinux
+│
+└── UNIX系
+    └── AIX
+```
+
+AIXを運用した経験があれば、
+
+- ファイル管理
+- ユーザー管理
+- 権限（Permission）
+- プロセス管理
+- サービス管理
+- ログ管理
+- ネットワーク設定
+- シェル操作
+
+など、多くの考え方はLinuxと共通しています。
+
+---
+
+# Linuxディストリビューション比較
+
+|ディストリビューション|特徴|主な用途|
+|---|---|---|
+|RHEL|企業向け・有償サポートあり|企業システム・基幹システム|
+|Ubuntu|初心者向け・人気が高い|Webサーバー・開発環境・クラウド|
+|Debian|安定性重視|サーバー・組み込み機器|
+|Rocky Linux|RHEL互換・無償|企業サーバー・RHEL代替|
+|AlmaLinux|RHEL互換・無償|企業サーバー・RHEL代替|
+
+---
+
+# 現場でよく聞かれること
+
+面接などで
+
+> **「Linux経験ありますか？」**
+
+と聞かれた場合は、
+
+さらに
+
+- Ubuntuですか？
+- RHELですか？
+- Rocky Linuxですか？
+- Debianですか？
+
+など、**どのLinuxディストリビューションを利用していたか**まで確認されることがよくあります。
+
+---
+
+# 試験・実務で最低限覚えるポイント
+
+```text
+Linux
+│
+├── RHEL（Red Hat）
+├── Ubuntu
+├── Debian
+├── Rocky Linux
+└── AlmaLinux
+```
+
+### Linux
+
+- OSの基盤（Linuxカーネル）
+- 一般的にはLinux系OS全体を指すことも多い
+
+### Red Hat
+
+- RHELを開発・提供している会社
+
+### RHEL
+
+- Red Hat Enterprise Linux
+- Red Hat社が提供する企業向けLinux
+
+### Enterprise
+
+- 企業向け
+- 大規模組織向け
+
+---
+
+# 一言でまとめる
+
+> **RHELは、企業システムを長期間・安全・安定して運用できるよう、Red Hat社が提供・サポートしているLinuxディストリビューションです。**
