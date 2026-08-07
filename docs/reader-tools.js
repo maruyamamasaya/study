@@ -10,11 +10,57 @@
   const BACKUP_PAGE_FILE = 'バックアップ・復元.md';
   const BACKUP_FORMAT = 'study-notes-backup';
   const BACKUP_VERSION = 1;
+  const THEME_STORAGE_KEY = 'study-notes:theme';
+  const THEME_COUNT = 5;
+  const THEME_COLORS = ['#0d1117', '#0d1117', '#0d1117', '#f7f7f5', '#000000'];
   let noteIndexPromise = null;
   let articleMasterPromise = null;
   let activeArticle = null;
   let activeStartedAt = null;
   let articleLoadSequence = 0;
+
+  function getCurrentTheme() {
+    const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+    return /^[1-5]$/.test(storedTheme || '') ? Number(storedTheme) : 1;
+  }
+
+  function applyTheme(theme) {
+    const selectedTheme = theme >= 1 && theme <= THEME_COUNT ? theme : 1;
+    document.documentElement.dataset.theme = String(selectedTheme);
+    document.querySelector('meta[name="theme-color"]')
+      .setAttribute('content', THEME_COLORS[selectedTheme - 1]);
+
+    const button = document.querySelector('.reader-theme');
+    if (button) {
+      button.querySelector('.reader-theme__number').textContent = String(selectedTheme);
+      button.setAttribute(
+        'aria-label',
+        'テーマ ' + selectedTheme + ' を使用中。押すと次のテーマに変更'
+      );
+      button.title = 'テーマ ' + selectedTheme + ' / ' + THEME_COUNT;
+    }
+  }
+
+  function createThemeSwitcher() {
+    if (document.querySelector('.reader-theme')) {
+      applyTheme(getCurrentTheme());
+      return;
+    }
+
+    const button = document.createElement('button');
+    button.className = 'reader-theme';
+    button.type = 'button';
+    button.innerHTML =
+      '<span class="reader-theme__number" aria-hidden="true"></span>' +
+      '<span class="reader-theme__label">テーマ</span>';
+    button.addEventListener('click', function () {
+      const nextTheme = getCurrentTheme() % THEME_COUNT + 1;
+      window.localStorage.setItem(THEME_STORAGE_KEY, String(nextTheme));
+      applyTheme(nextTheme);
+    });
+    document.body.appendChild(button);
+    applyTheme(getCurrentTheme());
+  }
 
   function loadNoteIndex() {
     if (!noteIndexPromise) {
@@ -984,6 +1030,7 @@
     });
 
     hook.doneEach(function () {
+      createThemeSwitcher();
       updateReaderHeader();
       enableHeaderOverflowUpdates();
       createReaderNavigation();
