@@ -34,7 +34,7 @@ button { color: inherit; }
 .line { display: inline-block; width: 24px; border-radius: 10px; background: currentColor; }
 .line-thin { height: 2px; }.line-medium { height: 4px; }.line-thick { height: 7px; }
 .canvas-shell { grid-column: 2; grid-row: 1; min-height: 430px; position: relative; overflow: hidden; background: #fff; border: 1px solid #deded9; border-radius: 13px; box-shadow: 0 8px 30px rgba(30,30,20,.07); }
-#board { display: block; width: 100%; height: 100%; touch-action: none; cursor: default; }
+#board { position: absolute; inset: 0; display: block; width: 100%; height: 100%; touch-action: none; cursor: default; }
 .canvas-shell[data-tool="pencil"] #board { cursor: crosshair; }
 .canvas-shell[data-tool="eraser"] #board { cursor: cell; }
 .canvas-shell[data-tool="rect"] #board, .canvas-shell[data-tool="arrow"] #board { cursor: crosshair; }

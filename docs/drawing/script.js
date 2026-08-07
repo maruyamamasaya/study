@@ -32,7 +32,18 @@
     ctx.restore();
   }
   function redraw() { ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight); objects.forEach(renderObject); if (active) renderObject(active); updateControls(); }
-  function resize() { const dpr = window.devicePixelRatio || 1, r = shell.getBoundingClientRect(); canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr); canvas.style.width = `${r.width}px`; canvas.style.height = `${r.height}px`; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); redraw(); }
+  function resize() {
+    const dpr = window.devicePixelRatio || 1;
+    const width = shell.clientWidth;
+    const height = shell.clientHeight;
+    const pixelWidth = Math.round(width * dpr);
+    const pixelHeight = Math.round(height * dpr);
+    if (canvas.width === pixelWidth && canvas.height === pixelHeight) return;
+    canvas.width = pixelWidth;
+    canvas.height = pixelHeight;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    redraw();
+  }
   new ResizeObserver(resize).observe(shell);
 
   function bounds(o) {
