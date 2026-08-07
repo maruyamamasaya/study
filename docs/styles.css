@@ -14,6 +14,94 @@
   --accent-soft: rgba(101, 245, 154, 0.12);
   --heading: #78f5a5;
   --heading-hover: #b0ffca;
+  --accent-decoration: rgba(101, 245, 154, 0.4);
+  --header-bg: rgba(13, 17, 23, 0.72);
+  --header-border: rgba(43, 52, 64, 0.58);
+  --subtle-border: rgba(43, 52, 64, 0.72);
+  --meta-bg: rgba(21, 27, 35, 0.82);
+  --meta-border: rgba(43, 52, 64, 0.82);
+  --code-bg: #090d12;
+  --code-text: #ccd6e0;
+  --navigation-bg: rgba(9, 13, 18, 0.94);
+  --accent-contrast: #07110b;
+  --sidebar-bg: #0b1110;
+}
+
+:root[data-theme="2"] {
+  --theme-color: #63b3ff;
+  --accent: #63b3ff;
+  --accent-hover: #9bd0ff;
+  --accent-soft: rgba(99, 179, 255, 0.13);
+  --heading: #78bdff;
+  --heading-hover: #b5dcff;
+  --accent-decoration: rgba(99, 179, 255, 0.42);
+  --accent-contrast: #06121d;
+}
+
+:root[data-theme="3"] {
+  --theme-color: #ffad5c;
+  --accent: #ffad5c;
+  --accent-hover: #ffd09c;
+  --accent-soft: rgba(255, 173, 92, 0.13);
+  --heading: #ffb86f;
+  --heading-hover: #ffdab5;
+  --accent-decoration: rgba(255, 173, 92, 0.42);
+  --accent-contrast: #1b0d02;
+}
+
+:root[data-theme="4"] {
+  color-scheme: light;
+  --theme-color: #24282e;
+  --page-bg: #f7f7f5;
+  --surface: #ffffff;
+  --surface-hover: #e9e9e6;
+  --border: #c9c9c4;
+  --text: #383b40;
+  --text-strong: #111317;
+  --muted: #6c7076;
+  --accent: #24282e;
+  --accent-hover: #000000;
+  --accent-soft: rgba(36, 40, 46, 0.09);
+  --heading: #181b20;
+  --heading-hover: #555a61;
+  --accent-decoration: rgba(36, 40, 46, 0.4);
+  --header-bg: rgba(247, 247, 245, 0.78);
+  --header-border: rgba(160, 160, 154, 0.5);
+  --subtle-border: rgba(160, 160, 154, 0.55);
+  --meta-bg: rgba(255, 255, 255, 0.88);
+  --meta-border: rgba(160, 160, 154, 0.65);
+  --code-bg: #ededeb;
+  --code-text: #25282d;
+  --navigation-bg: rgba(250, 250, 248, 0.96);
+  --accent-contrast: #ffffff;
+  --sidebar-bg: #eeeeeb;
+}
+
+:root[data-theme="5"] {
+  --theme-color: #ffffff;
+  --page-bg: #000000;
+  --surface: #111111;
+  --surface-hover: #202020;
+  --border: #444444;
+  --text: #d4d4d4;
+  --text-strong: #ffffff;
+  --muted: #9a9a9a;
+  --accent: #f1f1f1;
+  --accent-hover: #ffffff;
+  --accent-soft: rgba(255, 255, 255, 0.11);
+  --heading: #ffffff;
+  --heading-hover: #d0d0d0;
+  --accent-decoration: rgba(255, 255, 255, 0.42);
+  --header-bg: rgba(0, 0, 0, 0.76);
+  --header-border: rgba(255, 255, 255, 0.2);
+  --subtle-border: rgba(255, 255, 255, 0.24);
+  --meta-bg: rgba(17, 17, 17, 0.88);
+  --meta-border: rgba(255, 255, 255, 0.25);
+  --code-bg: #090909;
+  --code-text: #eeeeee;
+  --navigation-bg: rgba(0, 0, 0, 0.96);
+  --accent-contrast: #000000;
+  --sidebar-bg: #080808;
 }
 
 * {
@@ -41,8 +129,8 @@ body {
 }
 
 .reader-header {
-  background: rgba(13, 17, 23, 0.72);
-  border-bottom: 1px solid rgba(43, 52, 64, 0.58);
+  background: var(--header-bg);
+  border-bottom: 1px solid var(--header-border);
   left: 300px;
   padding: 0.65rem max(1.25rem, calc((100vw - 300px - 780px) / 2 + 2.5rem));
   position: fixed;
@@ -56,6 +144,7 @@ body {
 
 .reader-header__inner {
   min-width: 0;
+  padding-right: 4rem;
 }
 
 .reader-header__path,
@@ -90,6 +179,51 @@ body {
   opacity: 0.86;
 }
 
+.reader-theme {
+  align-items: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  color: var(--accent);
+  cursor: pointer;
+  display: flex;
+  font: inherit;
+  gap: 0.35rem;
+  padding: 0.25rem 0.55rem 0.25rem 0.3rem;
+  position: fixed;
+  right: 0.75rem;
+  top: 0.62rem;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
+  z-index: 102;
+}
+
+.reader-theme:hover,
+.reader-theme:focus-visible {
+  background: var(--surface-hover);
+  border-color: var(--accent);
+  color: var(--accent-hover);
+  outline: none;
+}
+
+.reader-theme__number {
+  align-items: center;
+  background: var(--accent);
+  border-radius: 50%;
+  color: var(--accent-contrast);
+  display: inline-flex;
+  font-size: 0.72rem;
+  font-weight: 800;
+  height: 1.35rem;
+  justify-content: center;
+  width: 1.35rem;
+}
+
+.reader-theme__label {
+  color: var(--muted);
+  font-size: 0.62rem;
+  font-weight: 650;
+}
+
 /* Keep these selectors deliberately more specific than Docsify's theme. The
  * !important declarations are a narrow override for heading levels 1–4 only. */
 body .markdown-section h1,
@@ -109,7 +243,7 @@ body .markdown-section h4 {
 }
 
 .markdown-section h2 {
-  border-bottom: 1px solid rgba(43, 52, 64, 0.72);
+  border-bottom: 1px solid var(--subtle-border);
   font-size: 1.5rem;
   margin-top: 2.8rem;
   padding-bottom: 0.45rem;
@@ -179,7 +313,7 @@ body .markdown-section h4 a:focus-visible {
 .markdown-section a {
   color: var(--accent);
   font-weight: 500;
-  text-decoration-color: rgba(101, 245, 154, 0.4);
+  text-decoration-color: var(--accent-decoration);
   text-underline-offset: 0.2em;
   transition: color 160ms ease, text-decoration-color 160ms ease;
 }
@@ -208,7 +342,7 @@ body .markdown-section h4 a:focus-visible {
 }
 
 .markdown-section pre {
-  background: #090d12;
+  background: var(--code-bg);
   border: 1px solid var(--border);
   border-radius: 10px;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
@@ -218,7 +352,7 @@ body .markdown-section h4 a:focus-visible {
 .markdown-section pre > code {
   background: transparent;
   border: 0;
-  color: #ccd6e0;
+  color: var(--code-text);
   padding: 0;
 }
 
@@ -287,8 +421,8 @@ body .markdown-section h4 a:focus-visible {
 
 .reader-meta {
   align-items: center;
-  background: rgba(21, 27, 35, 0.82);
-  border: 1px solid rgba(43, 52, 64, 0.82);
+  background: var(--meta-bg);
+  border: 1px solid var(--meta-border);
   border-radius: 7px;
   bottom: calc(3.35rem + 0.75rem);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
@@ -441,7 +575,7 @@ body .markdown-section h4 a:focus-visible {
 
 .reader-navigation {
   align-items: center;
-  background: rgba(9, 13, 18, 0.94);
+  background: var(--navigation-bg);
   border: 1px solid var(--border);
   border-bottom: 0;
   border-radius: 11px 11px 0 0;
@@ -540,7 +674,7 @@ body .markdown-section .reader-backup__home {
   background: var(--accent);
   border: 0;
   border-radius: 8px;
-  color: #07110b;
+  color: var(--accent-contrast);
   cursor: pointer;
   display: inline-block;
   font: inherit;
@@ -554,7 +688,7 @@ body .markdown-section .reader-backup__home {
 body .markdown-section .reader-backup__home:hover,
 body .markdown-section .reader-backup__home:focus-visible {
   background: var(--accent-hover);
-  color: #07110b;
+  color: var(--accent-contrast);
 }
 
 .reader-backup__status {
@@ -630,7 +764,7 @@ body .markdown-section .reader-backup__home:focus-visible {
 }
 
 .reader-search-dialog__input {
-  background: #090d12;
+  background: var(--code-bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--text-strong);
@@ -786,7 +920,7 @@ body .markdown-section .reader-backup__home:focus-visible {
 }
 
 .sidebar {
-  background: #0b1110;
+  background: var(--sidebar-bg);
   border-right-color: var(--border);
   color: var(--text);
 }
@@ -868,6 +1002,15 @@ body .markdown-section .reader-backup__home:focus-visible {
   .reader-header {
     left: 0;
     padding: 0.55rem 1.15rem;
+  }
+
+  .reader-theme {
+    right: 0.5rem;
+    top: 0.5rem;
+  }
+
+  .reader-theme__label {
+    display: none;
   }
 
   .reader-header__path.is-overflowing,
