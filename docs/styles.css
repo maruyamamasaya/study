@@ -33,23 +33,11 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-body::before {
-  background: radial-gradient(circle, rgba(101, 245, 154, 0.08), transparent 68%);
-  content: "";
-  height: 28rem;
-  left: 50%;
-  pointer-events: none;
-  position: fixed;
-  top: -18rem;
-  transform: translateX(-50%);
-  width: min(90vw, 72rem);
-}
-
 .markdown-section {
   color: var(--text);
   line-height: 1.9;
   max-width: 780px;
-  padding: 6.4rem 2.5rem 7rem;
+  padding: 5rem 2.5rem 7rem;
 }
 
 .reader-header {
@@ -874,7 +862,7 @@ body .markdown-section .reader-backup__home:focus-visible {
 
   .markdown-section {
     line-height: 1.8;
-    padding: 5rem 1.15rem 3.5rem;
+    padding: 4.5rem 1.15rem 3.5rem;
   }
 
   .reader-header {
