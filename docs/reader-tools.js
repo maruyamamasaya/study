@@ -11,6 +11,10 @@
   const BACKUP_FORMAT = 'study-notes-backup';
   const BACKUP_VERSION = 1;
   const THEME_STORAGE_KEY = 'study-notes:theme';
+  const SIDEBAR_WIDTH_STORAGE_KEY = 'study-notes:sidebar-width';
+  const SIDEBAR_COLLAPSED_STORAGE_KEY = 'study-notes:sidebar-collapsed';
+  const DESKTOP_SIDEBAR_MIN_WIDTH = 220;
+  const DESKTOP_SIDEBAR_MAX_WIDTH = 520;
   const THEME_COUNT = 5;
   const THEME_COLORS = ['#0d1117', '#0d1117', '#0d1117', '#f7f7f5', '#000000'];
   let noteIndexPromise = null;
@@ -18,6 +22,109 @@
   let activeArticle = null;
   let activeStartedAt = null;
   let articleLoadSequence = 0;
+
+  function isDesktopLayout() {
+    return window.matchMedia('(min-width: ' + (MOBILE_HEADER_BREAKPOINT + 1) + 'px)').matches;
+  }
+
+  function getDesktopSidebarWidth() {
+    const storedValue = window.localStorage.getItem(SIDEBAR_WIDTH_STORAGE_KEY);
+    const storedWidth = Number(storedValue);
+    if (storedValue === null || !Number.isFinite(storedWidth)) {
+      return 300;
+    }
+    return Math.min(DESKTOP_SIDEBAR_MAX_WIDTH, Math.max(DESKTOP_SIDEBAR_MIN_WIDTH, storedWidth));
+  }
+
+  function applyDesktopSidebarState() {
+    const collapsed = window.localStorage.getItem(SIDEBAR_COLLAPSED_STORAGE_KEY) === 'true';
+    document.documentElement.style.setProperty('--desktop-sidebar-width', getDesktopSidebarWidth() + 'px');
+    document.body.classList.toggle('desktop-sidebar-collapsed', isDesktopLayout() && collapsed);
+
+    const toggle = document.querySelector('.reader-sidebar-toggle');
+    if (toggle) {
+      toggle.setAttribute('aria-expanded', String(!collapsed));
+      toggle.setAttribute('aria-label', collapsed ? 'サイドバーを表示' : 'サイドバーを非表示');
+      toggle.title = collapsed ? 'サイドバーを表示' : 'サイドバーを非表示';
+      toggle.textContent = collapsed ? '›' : '‹';
+    }
+  }
+
+  function createDesktopSidebarControls() {
+    if (document.querySelector('.reader-sidebar-toggle')) {
+      applyDesktopSidebarState();
+      return;
+    }
+
+    const sidebar = document.querySelector('.sidebar');
+    if (!sidebar) {
+      return;
+    }
+
+    const toggle = document.createElement('button');
+    toggle.className = 'reader-sidebar-toggle';
+    toggle.type = 'button';
+    toggle.addEventListener('click', function () {
+      const isCollapsed = document.body.classList.contains('desktop-sidebar-collapsed');
+      window.localStorage.setItem(SIDEBAR_COLLAPSED_STORAGE_KEY, String(!isCollapsed));
+      applyDesktopSidebarState();
+    });
+    document.body.appendChild(toggle);
+
+    const resizer = document.createElement('div');
+    resizer.className = 'reader-sidebar-resizer';
+    resizer.setAttribute('role', 'separator');
+    resizer.setAttribute('aria-label', 'サイドバーの幅を調節');
+    resizer.setAttribute('aria-orientation', 'vertical');
+    resizer.tabIndex = 0;
+
+    function setWidth(width) {
+      const nextWidth = Math.min(DESKTOP_SIDEBAR_MAX_WIDTH, Math.max(DESKTOP_SIDEBAR_MIN_WIDTH, width));
+      window.localStorage.setItem(SIDEBAR_WIDTH_STORAGE_KEY, String(Math.round(nextWidth)));
+      document.documentElement.style.setProperty('--desktop-sidebar-width', nextWidth + 'px');
+      resizer.setAttribute('aria-valuenow', String(Math.round(nextWidth)));
+    }
+
+    resizer.addEventListener('pointerdown', function (event) {
+      if (!isDesktopLayout()) {
+        return;
+      }
+      resizer.setPointerCapture(event.pointerId);
+      document.body.classList.add('is-resizing-sidebar');
+    });
+    resizer.addEventListener('pointermove', function (event) {
+      if (resizer.hasPointerCapture(event.pointerId)) {
+        setWidth(event.clientX);
+      }
+    });
+    resizer.addEventListener('pointerup', function (event) {
+      if (resizer.hasPointerCapture(event.pointerId)) {
+        resizer.releasePointerCapture(event.pointerId);
+      }
+      document.body.classList.remove('is-resizing-sidebar');
+    });
+    resizer.addEventListener('pointercancel', function () {
+      document.body.classList.remove('is-resizing-sidebar');
+    });
+    resizer.addEventListener('keydown', function (event) {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') {
+        return;
+      }
+      event.preventDefault();
+      setWidth(getDesktopSidebarWidth() + (event.key === 'ArrowRight' ? 10 : -10));
+    });
+    sidebar.appendChild(resizer);
+    resizer.setAttribute('aria-valuemin', String(DESKTOP_SIDEBAR_MIN_WIDTH));
+    resizer.setAttribute('aria-valuemax', String(DESKTOP_SIDEBAR_MAX_WIDTH));
+    resizer.setAttribute('aria-valuenow', String(getDesktopSidebarWidth()));
+
+    window.matchMedia('(min-width: ' + (MOBILE_HEADER_BREAKPOINT + 1) + 'px)')
+      .addEventListener('change', function () {
+        applyDesktopSidebarState();
+        createReaderNavigation();
+      });
+    applyDesktopSidebarState();
+  }
 
   function getCurrentTheme() {
     const storedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
@@ -693,6 +800,11 @@
   function createReaderNavigation() {
     const existingNavigation = document.querySelector('.reader-navigation');
     if (existingNavigation) {
+      const sidebar = document.querySelector('.sidebar');
+      const target = isDesktopLayout() && sidebar ? sidebar : document.body;
+      if (existingNavigation.parentElement !== target) {
+        target.appendChild(existingNavigation);
+      }
       updateReaderNavigation(existingNavigation);
       return;
     }
@@ -727,7 +839,8 @@
         '<span>バックアップ・復元</span>' +
       '</a>';
 
-    document.body.appendChild(navigation);
+    const sidebar = document.querySelector('.sidebar');
+    (isDesktopLayout() && sidebar ? sidebar : document.body).appendChild(navigation);
 
     navigation.querySelector('.reader-toc').addEventListener('click', function () {
       openTableOfContents();
@@ -753,6 +866,13 @@
   function updateReaderNavigation(navigation) {
     const isHomepage = getCurrentNotePath() === HOMEPAGE_FILE;
     navigation.classList.toggle('is-homepage', isHomepage);
+    if (isDesktopLayout()) {
+      navigation.querySelectorAll('.reader-navigation__button').forEach(function (button) {
+        button.hidden = !button.classList.contains('reader-home') &&
+          !button.classList.contains('reader-search');
+      });
+      return;
+    }
     navigation.querySelectorAll('.reader-navigation__button:not(.reader-backup-link)')
       .forEach(function (button) {
         button.hidden = isHomepage;
@@ -1031,6 +1151,7 @@
 
     hook.doneEach(function () {
       createThemeSwitcher();
+      createDesktopSidebarControls();
       updateReaderHeader();
       enableHeaderOverflowUpdates();
       createReaderNavigation();
