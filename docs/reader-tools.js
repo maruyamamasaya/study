@@ -8,6 +8,7 @@
   const ARTICLE_MASTER_FILE = READER_CONFIG.articleMasterFile || '_article-master.json';
   const NOTE_INDEX_FILE = READER_CONFIG.noteIndexFile || '_note-index.json';
   const PATH_PREFIX = READER_CONFIG.pathPrefix || '';
+  const SHOW_BACKUP_LINK = READER_CONFIG.showBackupLink !== false;
   const ARTICLE_STORAGE_PREFIX = 'study-notes:article:';
   const CHECKLIST_STORAGE_PREFIX = 'study-notes-checklist::';
   const BACKUP_PAGE_FILE = READER_CONFIG.backupPageFile || 'バックアップ・復元.md';
@@ -873,12 +874,12 @@
       '<button class="reader-navigation__button reader-forward" type="button">' +
         '<span class="reader-navigation__icon" aria-hidden="true">→</span>' +
         '<span>次に進む</span>' +
-      '</button>' +
+      '</button>' + (SHOW_BACKUP_LINK ?
       '<a class="reader-navigation__button reader-backup-link" href="#/' +
         encodeNotePath(BACKUP_PAGE_FILE) + '">' +
         '<span class="reader-navigation__icon" aria-hidden="true">⇅</span>' +
         '<span>バックアップ・復元</span>' +
-      '</a>';
+      '</a>' : '');
 
     const sidebar = document.querySelector('.sidebar');
     (isDesktopLayout() && sidebar ? sidebar : document.body).appendChild(navigation);
@@ -942,7 +943,9 @@
 
   function updateReaderNavigation(navigation) {
     const isHomepage = getCurrentNotePath() === HOMEPAGE_FILE;
+    const backupLink = navigation.querySelector('.reader-backup-link');
     navigation.classList.toggle('is-homepage', isHomepage);
+    navigation.hidden = !isDesktopLayout() && isHomepage && !backupLink;
     if (isDesktopLayout()) {
       navigation.querySelectorAll('.reader-navigation__button').forEach(function (button) {
         button.hidden = !button.classList.contains('reader-home') &&
@@ -955,7 +958,9 @@
       .forEach(function (button) {
         button.hidden = isHomepage;
       });
-    navigation.querySelector('.reader-backup-link').hidden = !isHomepage;
+    if (backupLink) {
+      backupLink.hidden = !isHomepage;
+    }
   }
 
   function closeSearch() {

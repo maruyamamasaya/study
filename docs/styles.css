@@ -634,6 +634,10 @@ body .markdown-section h4 a:focus-visible {
   z-index: 100;
 }
 
+.reader-navigation[hidden] {
+  display: none;
+}
+
 .reader-navigation__button {
   align-items: center;
   background: transparent;
