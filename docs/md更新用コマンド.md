@@ -1,5 +1,6 @@
 ```
 cd "/Users/maruyamasusumuya/Library/Mobile Documents/iCloud~md~obsidian/Documents/勉強会/study" || exit 1
+
 git pull --rebase origin main
 
 rsync -av \
@@ -10,12 +11,15 @@ rsync -av \
   --exclude="*" \
   ../ docs/
 
+mkdir -p ../training-article
+
+cp -f \
+  docs/training/README.md \
+  ../training-article/README.md
+
 rsync -av \
   docs/training/article/ \
-  docs/training-article/
-
-mkdir -p docs/training-article
-cp -f docs/training/README.md docs/training-article/README.md
+  ../training-article/
 
 for f in ../*.md; do
   name=$(basename "$f")
