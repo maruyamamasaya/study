@@ -62,6 +62,19 @@
 
     const occurrences = Object.create(null);
     const assignedIds = new Set();
+    let generatedIdNumber = 2;
+
+    function createGeneratedId() {
+      let uniqueId = 'heading-' + generatedIdNumber;
+
+      while (reservedIds.has(uniqueId) || assignedIds.has(uniqueId)) {
+        generatedIdNumber += 1;
+        uniqueId = 'heading-' + generatedIdNumber;
+      }
+
+      generatedIdNumber += 1;
+      return uniqueId;
+    }
 
     headings.forEach(function (heading) {
       const occurrence = (occurrences[heading.baseId] || 0) + 1;
@@ -72,12 +85,10 @@
         return;
       }
 
-      let suffix = occurrence;
-      let uniqueId = heading.baseId + '-' + suffix;
-      while (reservedIds.has(uniqueId) || assignedIds.has(uniqueId)) {
-        suffix += 1;
-        uniqueId = heading.baseId + '-' + suffix;
-      }
+      // Docsify only recognizes ASCII custom IDs. A custom ID such as
+      // `:id=例-2` is treated as heading text and appears in the TOC as
+      // `例例-2`. Keep the displayed title intact by using an ASCII-only ID.
+      const uniqueId = createGeneratedId();
 
       assignedIds.add(uniqueId);
       lines[heading.lineNumber] =
