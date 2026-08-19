@@ -1,13 +1,16 @@
 (function () {
   'use strict';
 
+  const READER_CONFIG = window.READER_TOOLS_CONFIG || {};
   const JAPANESE_CHARACTERS_PER_MINUTE = 500;
   const MOBILE_HEADER_BREAKPOINT = 600;
-  const HOMEPAGE_FILE = '📚 Study Notes Hub.md';
-  const ARTICLE_MASTER_FILE = '_article-master.json';
+  const HOMEPAGE_FILE = READER_CONFIG.homepageFile || '📚 Study Notes Hub.md';
+  const ARTICLE_MASTER_FILE = READER_CONFIG.articleMasterFile || '_article-master.json';
+  const NOTE_INDEX_FILE = READER_CONFIG.noteIndexFile || '_note-index.json';
+  const PATH_PREFIX = READER_CONFIG.pathPrefix || '';
   const ARTICLE_STORAGE_PREFIX = 'study-notes:article:';
   const CHECKLIST_STORAGE_PREFIX = 'study-notes-checklist::';
-  const BACKUP_PAGE_FILE = 'バックアップ・復元.md';
+  const BACKUP_PAGE_FILE = READER_CONFIG.backupPageFile || 'バックアップ・復元.md';
   const BACKUP_FORMAT = 'study-notes-backup';
   const BACKUP_VERSION = 1;
   const THEME_STORAGE_KEY = 'study-notes:theme';
@@ -171,7 +174,7 @@
 
   function loadNoteIndex() {
     if (!noteIndexPromise) {
-      noteIndexPromise = fetch('_note-index.json')
+      noteIndexPromise = fetch(NOTE_INDEX_FILE)
         .then(function (response) {
           if (!response.ok) {
             throw new Error('ノート一覧を読み込めませんでした');
@@ -185,6 +188,17 @@
 
   function encodeNotePath(path) {
     return String(path).split('/').map(encodeURIComponent).join('/');
+  }
+
+  function getCanonicalNotePath(path) {
+    return PATH_PREFIX + path;
+  }
+
+  function getLocalNotePath(path) {
+    if (!PATH_PREFIX) {
+      return path;
+    }
+    return path.indexOf(PATH_PREFIX) === 0 ? path.slice(PATH_PREFIX.length) : null;
   }
 
   function loadArticleMaster() {
@@ -666,8 +680,9 @@
         return;
       }
 
+      const canonicalPath = getCanonicalNotePath(requestedPath);
       const article = (master.articles || []).find(function (candidate) {
-        return candidate.path.replace(/\.md$/i, '') === requestedPath.replace(/\.md$/i, '');
+        return candidate.path.replace(/\.md$/i, '') === canonicalPath.replace(/\.md$/i, '');
       });
       if (!article) {
         throw new Error('記事マスターに記事がありません: ' + requestedPath);
@@ -968,7 +983,10 @@
         }
 
         index[title].forEach(function (path) {
-          matches.push({ title: title, path: path });
+          const localPath = getLocalNotePath(path);
+          if (localPath !== null) {
+            matches.push({ title: title, path: localPath });
+          }
         });
       });
 
@@ -1181,7 +1199,7 @@
 
     return [
       'study-notes-checklist',
-      getCurrentNotePath(),
+      getCanonicalNotePath(getCurrentNotePath()),
       itemText,
       occurrence
     ].join('::');

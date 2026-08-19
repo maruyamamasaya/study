@@ -7,8 +7,17 @@
   <meta name="color-scheme" content="dark">
   <meta name="description" content="研修資料">
   <title>研修資料</title>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <script>
+    (function () {
+      var theme = window.localStorage.getItem('study-notes:theme');
+      if (/^[1-5]$/.test(theme || '')) {
+        document.documentElement.dataset.theme = theme;
+      }
+    })();
+  </script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
-  <link rel="stylesheet" href="../styles.css?v=20260819-training">
+  <link rel="stylesheet" href="../styles.css?v=20260819-training-tools">
 </head>
 <body>
   <div id="app">読み込み中...</div>
@@ -23,6 +32,18 @@
       markdown: { breaks: true }
     };
   </script>
+  <script>
+    window.READER_TOOLS_CONFIG = {
+      homepageFile: 'README.md',
+      backupPageFile: 'README.md',
+      articleMasterFile: '../_article-master.json',
+      noteIndexFile: '../_note-index.json',
+      pathPrefix: 'training/'
+    };
+  </script>
+  <script src="../unique-heading-ids.js?v=20260819-training-tools"></script>
+  <script src="../obsidian-wikilinks.js"></script>
+  <script src="../reader-tools.js?v=20260819-training-tools"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"></script>
 </body>
 </html>
