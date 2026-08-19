@@ -9,6 +9,14 @@ rsync -av \
   --exclude="*" \
   ../ docs/
 
+rsync -av \
+  docs/training/article/ \
+  docs/training-article/
+
+rsync -av \
+  docs/training/README.md \
+  docs/training-article/README.md
+
 for f in ../*.md; do
   name=$(basename "$f")
   if [ -f "docs/$name" ]; then
