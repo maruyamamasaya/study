@@ -624,7 +624,7 @@ body .markdown-section h4 a:focus-visible {
   bottom: 0;
   box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.35);
   display: grid;
-  grid-template-columns: repeat(3, minmax(3.7rem, 1fr));
+  grid-template-columns: repeat(5, minmax(3.7rem, 1fr));
   left: 50%;
   max-width: 32rem;
   overflow: hidden;

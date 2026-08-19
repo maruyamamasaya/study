@@ -847,10 +847,18 @@
         '<span class="reader-navigation__icon" aria-hidden="true">⌕</span>' +
         '<span>検索</span>' +
       '</button>' +
+      '<button class="reader-navigation__button reader-back" type="button">' +
+        '<span class="reader-navigation__icon" aria-hidden="true">←</span>' +
+        '<span>戻る</span>' +
+      '</button>' +
       '<a class="reader-navigation__button reader-home" href="#/">' +
         '<span class="reader-navigation__icon" aria-hidden="true">⌂</span>' +
         '<span>ホーム</span>' +
       '</a>' +
+      '<button class="reader-navigation__button reader-forward" type="button">' +
+        '<span class="reader-navigation__icon" aria-hidden="true">→</span>' +
+        '<span>次に進む</span>' +
+      '</button>' +
       '<a class="reader-navigation__button reader-backup-link" href="#/' +
         encodeNotePath(BACKUP_PAGE_FILE) + '">' +
         '<span class="reader-navigation__icon" aria-hidden="true">⇅</span>' +
@@ -866,12 +874,24 @@
 
     navigation.querySelector('.reader-search').addEventListener('click', openSearch);
 
+    navigation.querySelector('.reader-back').addEventListener('click', navigateBack);
+    navigation.querySelector('.reader-forward').addEventListener('click', function () {
+      window.history.forward();
+    });
+
     updateReaderNavigation(navigation);
     createHistoryNavigation();
   }
 
   function createHistoryNavigation() {
-    if (document.querySelector('.reader-history-navigation')) {
+    const existingNavigation = document.querySelector('.reader-history-navigation');
+    if (!isDesktopLayout()) {
+      if (existingNavigation) {
+        existingNavigation.remove();
+      }
+      return;
+    }
+    if (existingNavigation) {
       return;
     }
 
@@ -889,18 +909,20 @@
       '</button>';
     document.body.appendChild(navigation);
 
-    navigation.querySelector('.reader-back').addEventListener('click', function () {
-      if (window.history.length > 1) {
-        window.history.back();
-        return;
-      }
-
-      window.location.hash = '#/';
-    });
+    navigation.querySelector('.reader-back').addEventListener('click', navigateBack);
 
     navigation.querySelector('.reader-forward').addEventListener('click', function () {
       window.history.forward();
     });
+  }
+
+  function navigateBack() {
+    if (window.history.length > 1) {
+      window.history.back();
+      return;
+    }
+
+    window.location.hash = '#/';
   }
 
   function updateReaderNavigation(navigation) {
