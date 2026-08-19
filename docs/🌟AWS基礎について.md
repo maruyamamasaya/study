@@ -1,39 +1,39 @@
 監視・ジョブ系
-[[Amazon CloudWatch]]
+[[study/docs/記事：基礎編/基礎AWS/Amazon CloudWatch]]
 
 ユーザー・権限・アクセス
-[[IAM（Identity and Access Management）]]
+[[study/docs/記事：基礎編/基礎AWS/IAM（Identity and Access Management）]]
 
 ドメインやDNS・証明書
-[[Route 53]]
-[[AWS Certificate Manager（ACM）]]
+[[study/docs/記事：基礎編/基礎AWS/Route 53]]
+[[study/docs/記事：基礎編/基礎AWS/AWS Certificate Manager（ACM）]]
 
 会員管理・認証
-[[Amazon Cognito とは？]]
+[[study/docs/記事：基礎編/基礎AWS/Amazon Cognito とは？]]
 
 仮想サーバー
-[[Amazon EC2（Elastic Compute Cloud）]]
+[[study/docs/記事：基礎編/基礎AWS/Amazon EC2（Elastic Compute Cloud）]]
 
 初心者向けアプリ制作
-[[Elastic Beanstalkとは？]]
+[[study/docs/記事：基礎編/基礎AWS/Elastic Beanstalkとは？]]
 
-[[Amazon RDS（Relational Database Service）とは？]]
-[[Amazon S3（Simple Storage Service）]]
+[[study/docs/記事：基礎編/基礎AWS/Amazon RDS（Relational Database Service）とは？]]
+[[study/docs/記事：基礎編/基礎AWS/Amazon S3（Simple Storage Service）]]
 
-[[Amazon CloudFront]]
-[[AWS Lambdaとは？]]
-[[Amazon API Gateway とは？]]
+[[study/docs/記事：基礎編/基礎AWS/Amazon CloudFront]]
+[[study/docs/記事：基礎編/基礎AWS/AWS Lambdaとは？]]
+[[study/docs/記事：基礎編/基礎AWS/Amazon API Gateway とは？]]
 
 データベース
-[[Amazon RDS（Relational Database Service）とは？]]
+[[study/docs/記事：基礎編/基礎AWS/Amazon RDS（Relational Database Service）とは？]]
 [[記事：基礎編/基礎AWS/DynamoDBとは？|DynamoDBとは？]]
-[[Amazon Auroraとは？]]
+[[study/docs/記事：基礎編/基礎AWS/Amazon Auroraとは？]]
 
-[[AWSにおけるAZ]]とは？
-[[AWSリージョン（Region）]]
+[[study/docs/記事：基礎編/基礎AWS/AWSにおけるAZ]]とは？
+[[study/docs/記事：基礎編/基礎AWS/AWSリージョン（Region）]]
 
 ---
 
-[[AWSのAIサービス全体像]]
-→[[Amazon Bedrockとは？]]
-→→[[生成AIを作るためのサービス]]
+[[study/docs/記事：基礎編/基礎AWS/AWSのAIサービス全体像]]
+→[[study/docs/記事：基礎編/基礎AWS/Amazon Bedrockとは？]]
+→→[[study/docs/記事：基礎編/基礎AWS/生成AIを作るためのサービス]]

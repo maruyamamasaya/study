@@ -24,7 +24,7 @@ Terraformは最初は難しく見えますが、実際は **「コードを書�
 
 まずTerraformをインストールします。
 
-Macなら（[[Homebrew]]）
+Macなら（[[用語解説/Homebrew]]）
 
 ```
 brew install terraform

@@ -1210,7 +1210,7 @@ Reactは、
 |型安全|TypeScriptと組み合わせる|
 |フレームワーク|Next.jsなど|
 
-[[Reactでよく出てくる Component → Props ／ State]]
+[[記事：基礎編/Reactでよく出てくる Component → Props ／ State]]
 
 Reactを理解するときに最も重要なのは、
 
