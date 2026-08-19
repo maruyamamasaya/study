@@ -831,6 +831,7 @@
         target.appendChild(existingNavigation);
       }
       updateReaderNavigation(existingNavigation);
+      createHistoryNavigation();
       return;
     }
 
@@ -846,18 +847,10 @@
         '<span class="reader-navigation__icon" aria-hidden="true">⌕</span>' +
         '<span>検索</span>' +
       '</button>' +
-      '<button class="reader-navigation__button reader-back" type="button">' +
-        '<span class="reader-navigation__icon" aria-hidden="true">←</span>' +
-        '<span>戻る</span>' +
-      '</button>' +
       '<a class="reader-navigation__button reader-home" href="#/">' +
         '<span class="reader-navigation__icon" aria-hidden="true">⌂</span>' +
         '<span>ホーム</span>' +
       '</a>' +
-      '<button class="reader-navigation__button reader-forward" type="button">' +
-        '<span class="reader-navigation__icon" aria-hidden="true">→</span>' +
-        '<span>次に進む</span>' +
-      '</button>' +
       '<a class="reader-navigation__button reader-backup-link" href="#/' +
         encodeNotePath(BACKUP_PAGE_FILE) + '">' +
         '<span class="reader-navigation__icon" aria-hidden="true">⇅</span>' +
@@ -873,6 +866,29 @@
 
     navigation.querySelector('.reader-search').addEventListener('click', openSearch);
 
+    updateReaderNavigation(navigation);
+    createHistoryNavigation();
+  }
+
+  function createHistoryNavigation() {
+    if (document.querySelector('.reader-history-navigation')) {
+      return;
+    }
+
+    const navigation = document.createElement('nav');
+    navigation.className = 'reader-history-navigation';
+    navigation.setAttribute('aria-label', '閲覧履歴');
+    navigation.innerHTML =
+      '<button class="reader-history-navigation__button reader-back" type="button">' +
+        '<span aria-hidden="true">←</span>' +
+        '<span>戻る</span>' +
+      '</button>' +
+      '<button class="reader-history-navigation__button reader-forward" type="button">' +
+        '<span>進む</span>' +
+        '<span aria-hidden="true">→</span>' +
+      '</button>';
+    document.body.appendChild(navigation);
+
     navigation.querySelector('.reader-back').addEventListener('click', function () {
       if (window.history.length > 1) {
         window.history.back();
@@ -885,7 +901,6 @@
     navigation.querySelector('.reader-forward').addEventListener('click', function () {
       window.history.forward();
     });
-    updateReaderNavigation(navigation);
   }
 
   function updateReaderNavigation(navigation) {
