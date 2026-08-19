@@ -707,8 +707,7 @@
     header.querySelectorAll('.reader-header__path, .reader-header__title')
       .forEach(function (line) {
         const text = line.querySelector('.reader-header__text');
-        const shouldScroll = window.innerWidth <= MOBILE_HEADER_BREAKPOINT &&
-          text && text.scrollWidth > line.clientWidth;
+        const shouldScroll = text && text.scrollWidth > line.clientWidth;
 
         line.classList.toggle('is-overflowing', shouldScroll);
       });
@@ -738,8 +737,31 @@
       header.innerHTML =
         '<div class="reader-header__inner">' +
           '<p class="reader-header__path"></p>' +
-          '<p class="reader-header__title"></p>' +
+          '<p class="reader-header__title" role="button" tabindex="0"></p>' +
+          '<span class="reader-header__copy-status" aria-live="polite"></span>' +
         '</div>';
+      const titleElement = header.querySelector('.reader-header__title');
+      const copyTitle = function () {
+        copyTextToClipboard(titleElement.dataset.copyText || '').then(function () {
+          const status = header.querySelector('.reader-header__copy-status');
+          titleElement.classList.add('is-copied');
+          status.textContent = 'タイトルをコピーしました';
+          window.setTimeout(function () {
+            titleElement.classList.remove('is-copied');
+            status.textContent = '';
+          }, 1600);
+        }).catch(function () {
+          header.querySelector('.reader-header__copy-status').textContent =
+            'タイトルをコピーできませんでした';
+        });
+      };
+      titleElement.addEventListener('click', copyTitle);
+      titleElement.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          copyTitle();
+        }
+      });
       document.body.appendChild(header);
     }
 
@@ -750,7 +772,10 @@
     const directory = pathParts.length ? pathParts.join(' / ') : 'トップ';
 
     setHeaderLineContent(header.querySelector('.reader-header__path'), directory);
-    setHeaderLineContent(header.querySelector('.reader-header__title'), title);
+    const titleElement = header.querySelector('.reader-header__title');
+    setHeaderLineContent(titleElement, title);
+    titleElement.dataset.copyText = title;
+    titleElement.setAttribute('aria-label', title + '。クリックしてタイトルをコピー');
     window.requestAnimationFrame(updateHeaderOverflow);
   }
 
@@ -1044,8 +1069,7 @@
     }
   }
 
-  function copyCodeBlock(codeBlock) {
-    const text = codeBlock.textContent || '';
+  function copyTextToClipboard(text) {
     const copyWithFallback = function () {
       const textArea = document.createElement('textarea');
       textArea.value = text;
@@ -1066,7 +1090,13 @@
       ? navigator.clipboard.writeText(text).catch(copyWithFallback)
       : Promise.resolve().then(copyWithFallback);
 
-    return copyPromise.then(function () {
+    return copyPromise;
+  }
+
+  function copyCodeBlock(codeBlock) {
+    const text = codeBlock.textContent || '';
+
+    return copyTextToClipboard(text).then(function () {
       const codeContainer = codeBlock.parentElement;
       codeContainer.classList.add('is-copied');
       codeContainer.setAttribute('aria-label', 'コピーしました');

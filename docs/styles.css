@@ -180,6 +180,47 @@ body {
   opacity: 0.86;
 }
 
+.reader-header__title[role="button"] {
+  cursor: copy;
+}
+
+.reader-header__title[role="button"]:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+.reader-header__title.is-copied::after {
+  content: "コピーしました";
+  font-size: 0.62rem;
+  margin-left: 0.65rem;
+  vertical-align: middle;
+}
+
+.reader-header__copy-status {
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  position: absolute;
+  width: 1px;
+  clip-path: inset(50%);
+}
+
+.reader-header__path.is-overflowing,
+.reader-header__title.is-overflowing {
+  text-overflow: clip;
+}
+
+.reader-header__path.is-overflowing .reader-header__track,
+.reader-header__title.is-overflowing .reader-header__track {
+  animation: reader-header-marquee 12s linear infinite;
+}
+
+.reader-header__path.is-overflowing .reader-header__text,
+.reader-header__title.is-overflowing .reader-header__text {
+  display: inline-block;
+  padding-right: 3rem;
+}
+
 .reader-theme {
   align-items: center;
   background: var(--surface);
@@ -1129,22 +1170,6 @@ body .markdown-section .reader-backup__home:focus-visible {
 
   .reader-theme__label {
     display: none;
-  }
-
-  .reader-header__path.is-overflowing,
-  .reader-header__title.is-overflowing {
-    text-overflow: clip;
-  }
-
-  .reader-header__path.is-overflowing .reader-header__track,
-  .reader-header__title.is-overflowing .reader-header__track {
-    animation: reader-header-marquee 12s linear infinite;
-  }
-
-  .reader-header__path.is-overflowing .reader-header__text,
-  .reader-header__title.is-overflowing .reader-header__text {
-    display: inline-block;
-    padding-right: 3rem;
   }
 
   .markdown-section h1 {
