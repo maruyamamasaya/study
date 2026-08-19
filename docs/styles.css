@@ -1076,7 +1076,7 @@ body .markdown-section .reader-backup__home:focus-visible {
     bottom: 0.75rem;
     box-shadow: none;
     gap: 0.5rem;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     left: 0.75rem;
     max-width: none;
     transform: none;
