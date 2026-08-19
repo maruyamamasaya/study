@@ -1,4 +1,6 @@
 ```
+set -e
+
 git pull --rebase origin main
 
 rsync -av \
@@ -13,9 +15,8 @@ rsync -av \
   docs/training/article/ \
   docs/training-article/
 
-rsync -av \
-  docs/training/README.md \
-  docs/training-article/README.md
+mkdir -p docs/training-article
+cp -f docs/training/README.md docs/training-article/README.md
 
 for f in ../*.md; do
   name=$(basename "$f")
@@ -33,6 +34,11 @@ done
 python3 build_note_index.py
 
 git add docs
-git commit -m "Sync notes"
-git push origin main
+
+if ! git diff --cached --quiet; then
+  git commit -m "Sync notes"
+  git push origin main
+else
+  echo "変更なし"
+fi
 ```
