@@ -325,7 +325,8 @@
     "用語解説/RDS"
   ],
   "README": [
-    "training-article/README"
+    "training-article/README",
+    "training/README"
   ],
   "ROLLBACKとは？": [
     "記事：実践編/データベース用語解説/ROLLBACKとは？"

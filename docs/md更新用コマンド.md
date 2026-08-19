@@ -1,6 +1,4 @@
 ```
-set -e
-
 git pull --rebase origin main
 
 rsync -av \
