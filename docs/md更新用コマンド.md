@@ -1,4 +1,5 @@
 ```
+cd "/Users/maruyamasusumuya/Library/Mobile Documents/iCloud~md~obsidian/Documents/勉強会/study" || exit 1
 git pull --rebase origin main
 
 rsync -av \
