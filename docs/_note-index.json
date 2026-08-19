@@ -325,7 +325,6 @@
     "用語解説/RDS"
   ],
   "README": [
-    "training-article/README",
     "training/README"
   ],
   "ROLLBACKとは？": [
@@ -440,7 +439,6 @@
     "記事：基礎編/VMwareまとめ"
   ],
   "VMware脱却について ― トレイニー向け説明": [
-    "training-article/VMware脱却について ― トレイニー向け説明",
     "training/article/VMware脱却について ― トレイニー向け説明"
   ],
   "VMware脱却・OpenShift移行案件の現状整理": [
