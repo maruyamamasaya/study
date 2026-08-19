@@ -909,7 +909,8 @@
     if (isDesktopLayout()) {
       navigation.querySelectorAll('.reader-navigation__button').forEach(function (button) {
         button.hidden = !button.classList.contains('reader-home') &&
-          !button.classList.contains('reader-search');
+          !button.classList.contains('reader-search') &&
+          !button.classList.contains('reader-backup-link');
       });
       return;
     }
