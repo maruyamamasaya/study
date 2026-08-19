@@ -212,7 +212,7 @@ body {
 
 .reader-header__path.is-overflowing .reader-header__track,
 .reader-header__title.is-overflowing .reader-header__track {
-  animation: reader-header-marquee 12s linear infinite;
+  animation: reader-header-marquee 20s linear infinite;
 }
 
 .reader-header__path.is-overflowing .reader-header__text,
@@ -1016,7 +1016,7 @@ body .markdown-section .reader-backup__home:focus-visible {
   }
 
   .reader-header__title {
-    font-size: calc(2.1rem + 1pt);
+    font-size: 1.18rem;
     font-weight: 650;
     letter-spacing: -0.025em;
     line-height: 1.2;
