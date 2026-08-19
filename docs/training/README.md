@@ -1,8 +1,12 @@
 # 研修資料
 
-このページは研修資料のトップページです。
 
-今後、このディレクトリ配下に研修用の Markdown ファイルを追加していきます。
+
+
+
+
+
+---
 
 <div class="reader-backup">
   <section class="reader-backup__item">
