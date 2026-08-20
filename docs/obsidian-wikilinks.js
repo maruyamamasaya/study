@@ -3,6 +3,10 @@
 
   let noteIndexPromise = null;
 
+  function getConfig() {
+    return window.READER_TOOLS_CONFIG || {};
+  }
+
   /**
    * ノート一覧を読み込む
    */
@@ -11,7 +15,10 @@
       return noteIndexPromise;
     }
 
-    noteIndexPromise = fetch('_note-index.json')
+    const noteIndexFile =
+      getConfig().noteIndexFile || '_note-index.json';
+
+    noteIndexPromise = fetch(noteIndexFile)
       .then(function (response) {
         if (!response.ok) {
           throw new Error(
@@ -70,6 +77,25 @@
         return encodeURIComponent(part);
       })
       .join('/');
+  }
+
+  /**
+   * サブディレクトリで動くDocsify用にパスを調整する
+   */
+  function toLocalRoutePath(path) {
+    const normalizedPath = normalizePath(path);
+    const pathPrefix = normalizePath(
+      getConfig().pathPrefix
+    );
+
+    if (
+      pathPrefix &&
+      normalizedPath.startsWith(pathPrefix + '/')
+    ) {
+      return normalizedPath.slice(pathPrefix.length + 1);
+    }
+
+    return normalizedPath;
   }
 
   /**
@@ -221,7 +247,9 @@
     }
 
     const resolvedPath = resolveNotePath(noteName, index);
-    const encodedPath = encodeRoutePath(resolvedPath);
+    const encodedPath = encodeRoutePath(
+      toLocalRoutePath(resolvedPath)
+    );
 
     /*
      * HTMLのhrefとして直接 #/ルートを作る。
