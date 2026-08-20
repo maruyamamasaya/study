@@ -7,6 +7,16 @@
       "title": "md更新用コマンド"
     },
     {
+      "id": "c69ee8a3-ffa3-46c2-9f8b-9c2b9373d6dd",
+      "path": "training/DNS・IPアドレス・ポート番号の仕組み.md",
+      "title": "DNS・IPアドレス・ポート番号の仕組み"
+    },
+    {
+      "id": "76a9acd5-0957-42bd-8ed2-eb7b88621125",
+      "path": "training/OSI参照モデル ― 画像をAからBへ送るとき通信はどうなる？.md",
+      "title": "OSI参照モデル ― 画像をAからBへ送るとき通信はどうなる？"
+    },
+    {
       "id": "39c9ffff-2a67-4792-a5b8-bdce3525d5f8",
       "path": "training/README.md",
       "title": "README"
@@ -17,9 +27,14 @@
       "title": "VMware脱却について トレイニー向け説明"
     },
     {
+      "id": "e08acba6-f10d-4be9-b5ac-0b2b70005733",
+      "path": "training/家庭・社内ネットワークから理解するIPアドレス・NAT・DNS.md",
+      "title": "家庭・社内ネットワークから理解するIPアドレス・NAT・DNS"
+    },
+    {
       "id": "6d555216-5e22-4c62-961e-126af325fdc7",
-      "path": "にじいろ保育園.md",
-      "title": "にじいろ保育園"
+      "path": "にじいろ保育園.md",
+      "title": "にじいろ保育園"
     },
     {
       "id": "77c1072f-a151-47ba-a66c-31b1bf4febb1",

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import unicodedata
 import uuid
 from collections import defaultdict
 from pathlib import Path
@@ -18,7 +19,7 @@ except (FileNotFoundError, json.JSONDecodeError):
     current_master = {"articles": []}
 
 article_ids = {
-    article["path"]: article["id"]
+    unicodedata.normalize("NFC", article["path"]): article["id"]
     for article in current_master.get("articles", [])
     if isinstance(article, dict) and article.get("path") and article.get("id")
 }
@@ -29,7 +30,7 @@ for markdown_file in DOCS_DIR.rglob("*.md"):
     article_path = relative_path.as_posix()
 
     articles.append({
-        "id": article_ids.get(article_path, str(uuid.uuid4())),
+        "id": article_ids.get(unicodedata.normalize("NFC", article_path), str(uuid.uuid4())),
         "path": article_path,
         "title": markdown_file.stem,
     })
