@@ -7,6 +7,16 @@
       "title": "md更新用コマンド"
     },
     {
+      "id": "c202ce13-dd1f-4b11-b509-fe0fb73dc3c2",
+      "path": "training/DNS・IPアドレス・ポート番号の仕組み.md",
+      "title": "DNS・IPアドレス・ポート番号の仕組み"
+    },
+    {
+      "id": "41565283-98de-43a2-be4f-04c49662d350",
+      "path": "training/OSI参照モデル ― 画像をAからBへ送るとき通信はどうなる？.md",
+      "title": "OSI参照モデル ― 画像をAからBへ送るとき通信はどうなる？"
+    },
+    {
       "id": "39c9ffff-2a67-4792-a5b8-bdce3525d5f8",
       "path": "training/README.md",
       "title": "README"
@@ -15,6 +25,11 @@
       "id": "4fd2ac13-44c8-4c0f-8030-18bf2c3273b6",
       "path": "training/VMware脱却について トレイニー向け説明.md",
       "title": "VMware脱却について トレイニー向け説明"
+    },
+    {
+      "id": "8b9166ab-94b8-4098-b81c-d818830349d6",
+      "path": "training/家庭・社内ネットワークから理解するIPアドレス・NAT・DNS.md",
+      "title": "家庭・社内ネットワークから理解するIPアドレス・NAT・DNS"
     },
     {
       "id": "6d555216-5e22-4c62-961e-126af325fdc7",
