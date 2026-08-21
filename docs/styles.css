@@ -1233,10 +1233,57 @@ body .markdown-section .reader-backup__home:focus-visible {
   }
 }
 
+/* Below the single sidebar breakpoint, the sidebar is an overlay. Opening it
+ * must not squeeze the article or move the header into the available space. */
+body:not(.sidebar-wide-layout) .content,
+body:not(.sidebar-wide-layout) .reader-header,
+body:not(.sidebar-wide-layout).desktop-sidebar-collapsed .content,
+body:not(.sidebar-wide-layout).desktop-sidebar-collapsed .reader-header {
+  left: 0;
+}
+
 @media (max-width: 600px) {
-  .reader-sidebar-toggle,
   .reader-sidebar-resizer {
     display: none;
+  }
+
+  .sidebar {
+    transform: translateX(0);
+    width: var(--desktop-sidebar-width);
+  }
+
+  body.desktop-sidebar-collapsed .sidebar {
+    transform: translateX(calc(-1 * var(--desktop-sidebar-width)));
+  }
+
+  .reader-sidebar-toggle {
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0 7px 7px 0;
+    color: var(--accent);
+    cursor: pointer;
+    display: flex;
+    font-size: 1.2rem;
+    height: 2.5rem;
+    justify-content: center;
+    left: var(--desktop-sidebar-width);
+    padding: 0;
+    position: fixed;
+    top: 4.5rem;
+    transition: left 180ms ease;
+    width: 1.7rem;
+    z-index: 201;
+  }
+
+  body.desktop-sidebar-collapsed .reader-sidebar-toggle {
+    left: 0;
+  }
+
+  .reader-sidebar-toggle:focus-visible,
+  .reader-sidebar-toggle:hover {
+    background: var(--surface-hover);
+    outline: 2px solid var(--accent);
   }
   body {
     font-size: calc(13.5px + 1pt);
