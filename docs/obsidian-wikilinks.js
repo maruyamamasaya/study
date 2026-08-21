@@ -57,6 +57,7 @@
       .replace(/\\/g, '/')
       .replace(/\.md$/i, '')
       .replace(/^\/+/, '')
+      .replace(/\/+$/, '')
       .replace(/\/+/g, '/')
       .trim();
   }
