@@ -854,10 +854,8 @@
   function createReaderNavigation() {
     const existingNavigation = document.querySelector('.reader-navigation');
     if (existingNavigation) {
-      const sidebar = document.querySelector('.sidebar');
-      const target = isDesktopLayout() && sidebar ? sidebar : document.body;
-      if (existingNavigation.parentElement !== target) {
-        target.appendChild(existingNavigation);
+      if (existingNavigation.parentElement !== document.body) {
+        document.body.appendChild(existingNavigation);
       }
       updateReaderNavigation(existingNavigation);
       createHistoryNavigation();
@@ -894,8 +892,10 @@
         '<span>バックアップ・復元</span>' +
       '</a>' : '');
 
-    const sidebar = document.querySelector('.sidebar');
-    (isDesktopLayout() && sidebar ? sidebar : document.body).appendChild(navigation);
+    // Keep the controls outside the scrollable sidebar. A fixed element inside
+    // Docsify's transformed sidebar uses that sidebar as its containing block
+    // and consequently moves together with the navigation list.
+    document.body.appendChild(navigation);
 
     navigation.querySelector('.reader-toc').addEventListener('click', function () {
       openTableOfContents();
