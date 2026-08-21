@@ -4,6 +4,7 @@
   const READER_CONFIG = window.READER_TOOLS_CONFIG || {};
   const JAPANESE_CHARACTERS_PER_MINUTE = 500;
   const MOBILE_HEADER_BREAKPOINT = 600;
+  const SIDEBAR_AUTO_SHOW_BREAKPOINT = 1100;
   const HOMEPAGE_FILE = READER_CONFIG.homepageFile || '📚 Study Notes Hub.md';
   const ARTICLE_MASTER_FILE = READER_CONFIG.articleMasterFile || '_article-master.json';
   const NOTE_INDEX_FILE = READER_CONFIG.noteIndexFile || '_note-index.json';
@@ -16,7 +17,6 @@
   const BACKUP_VERSION = 1;
   const THEME_STORAGE_KEY = 'study-notes:theme';
   const SIDEBAR_WIDTH_STORAGE_KEY = 'study-notes:sidebar-width';
-  const SIDEBAR_COLLAPSED_STORAGE_KEY = 'study-notes:sidebar-collapsed';
   const DESKTOP_SIDEBAR_MIN_WIDTH = 220;
   const DESKTOP_SIDEBAR_MAX_WIDTH = 520;
   const THEME_COUNT = 5;
@@ -26,6 +26,7 @@
   let activeArticle = null;
   let activeStartedAt = null;
   let articleLoadSequence = 0;
+  let desktopSidebarOverride = null;
 
   function isDesktopLayout() {
     return window.matchMedia('(min-width: ' + (MOBILE_HEADER_BREAKPOINT + 1) + 'px)').matches;
@@ -41,7 +42,9 @@
   }
 
   function applyDesktopSidebarState() {
-    const collapsed = window.localStorage.getItem(SIDEBAR_COLLAPSED_STORAGE_KEY) === 'true';
+    const shouldAutoCollapse = window.innerWidth < SIDEBAR_AUTO_SHOW_BREAKPOINT;
+    const collapsed = isDesktopLayout() &&
+      (desktopSidebarOverride === null ? shouldAutoCollapse : desktopSidebarOverride);
     document.documentElement.style.setProperty('--desktop-sidebar-width', getDesktopSidebarWidth() + 'px');
     document.body.classList.toggle('desktop-sidebar-collapsed', isDesktopLayout() && collapsed);
 
@@ -70,7 +73,7 @@
     toggle.type = 'button';
     toggle.addEventListener('click', function () {
       const isCollapsed = document.body.classList.contains('desktop-sidebar-collapsed');
-      window.localStorage.setItem(SIDEBAR_COLLAPSED_STORAGE_KEY, String(!isCollapsed));
+      desktopSidebarOverride = !isCollapsed;
       applyDesktopSidebarState();
     });
     document.body.appendChild(toggle);
@@ -124,8 +127,14 @@
 
     window.matchMedia('(min-width: ' + (MOBILE_HEADER_BREAKPOINT + 1) + 'px)')
       .addEventListener('change', function () {
+        desktopSidebarOverride = null;
         applyDesktopSidebarState();
         createReaderNavigation();
+      });
+    window.matchMedia('(min-width: ' + SIDEBAR_AUTO_SHOW_BREAKPOINT + 'px)')
+      .addEventListener('change', function () {
+        desktopSidebarOverride = null;
+        applyDesktopSidebarState();
       });
     applyDesktopSidebarState();
   }
@@ -907,7 +916,11 @@
       }
       return;
     }
+    const sidebar = document.querySelector('.sidebar');
     if (existingNavigation) {
+      if (sidebar && existingNavigation.parentElement !== sidebar) {
+        sidebar.appendChild(existingNavigation);
+      }
       return;
     }
 
@@ -926,7 +939,7 @@
         '<span>進む</span>' +
         '<span aria-hidden="true">→</span>' +
       '</button>';
-    document.body.appendChild(navigation);
+    (sidebar || document.body).appendChild(navigation);
 
     navigation.querySelector('.reader-back').addEventListener('click', navigateBack);
 
