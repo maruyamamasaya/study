@@ -4,7 +4,7 @@
   const READER_CONFIG = window.READER_TOOLS_CONFIG || {};
   const JAPANESE_CHARACTERS_PER_MINUTE = 500;
   const MOBILE_HEADER_BREAKPOINT = 600;
-  const SIDEBAR_AUTO_SHOW_BREAKPOINT = 1100;
+  const SIDEBAR_LAYOUT_BREAKPOINT = 1100;
   const HOMEPAGE_FILE = READER_CONFIG.homepageFile || '📚 Study Notes Hub.md';
   const ARTICLE_MASTER_FILE = READER_CONFIG.articleMasterFile || '_article-master.json';
   const NOTE_INDEX_FILE = READER_CONFIG.noteIndexFile || '_note-index.json';
@@ -32,6 +32,10 @@
     return window.matchMedia('(min-width: ' + (MOBILE_HEADER_BREAKPOINT + 1) + 'px)').matches;
   }
 
+  function isWideSidebarLayout() {
+    return window.matchMedia('(min-width: ' + SIDEBAR_LAYOUT_BREAKPOINT + 'px)').matches;
+  }
+
   function getDesktopSidebarWidth() {
     const storedValue = window.localStorage.getItem(SIDEBAR_WIDTH_STORAGE_KEY);
     const storedWidth = Number(storedValue);
@@ -42,11 +46,13 @@
   }
 
   function applyDesktopSidebarState() {
-    const shouldAutoCollapse = window.innerWidth < SIDEBAR_AUTO_SHOW_BREAKPOINT;
-    const collapsed = isDesktopLayout() &&
-      (desktopSidebarOverride === null ? shouldAutoCollapse : desktopSidebarOverride);
+    const wideSidebarLayout = isWideSidebarLayout();
+    const collapsed = desktopSidebarOverride === null
+      ? !wideSidebarLayout
+      : desktopSidebarOverride;
     document.documentElement.style.setProperty('--desktop-sidebar-width', getDesktopSidebarWidth() + 'px');
-    document.body.classList.toggle('desktop-sidebar-collapsed', isDesktopLayout() && collapsed);
+    document.body.classList.toggle('sidebar-wide-layout', wideSidebarLayout);
+    document.body.classList.toggle('desktop-sidebar-collapsed', collapsed);
 
     const toggle = document.querySelector('.reader-sidebar-toggle');
     if (toggle) {
@@ -127,11 +133,9 @@
 
     window.matchMedia('(min-width: ' + (MOBILE_HEADER_BREAKPOINT + 1) + 'px)')
       .addEventListener('change', function () {
-        desktopSidebarOverride = null;
-        applyDesktopSidebarState();
         createReaderNavigation();
       });
-    window.matchMedia('(min-width: ' + SIDEBAR_AUTO_SHOW_BREAKPOINT + 'px)')
+    window.matchMedia('(min-width: ' + SIDEBAR_LAYOUT_BREAKPOINT + 'px)')
       .addEventListener('change', function () {
         desktopSidebarOverride = null;
         applyDesktopSidebarState();
