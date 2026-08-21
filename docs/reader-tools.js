@@ -919,6 +919,9 @@
         '<span aria-hidden="true">←</span>' +
         '<span>戻る</span>' +
       '</button>' +
+      '<a class="reader-history-navigation__button reader-history-home" href="#/" aria-label="ホーム" title="ホーム">' +
+        '<span aria-hidden="true">⌂</span>' +
+      '</a>' +
       '<button class="reader-history-navigation__button reader-forward" type="button">' +
         '<span>進む</span>' +
         '<span aria-hidden="true">→</span>' +
