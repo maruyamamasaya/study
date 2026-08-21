@@ -920,10 +920,9 @@
       }
       return;
     }
-    const sidebar = document.querySelector('.sidebar');
     if (existingNavigation) {
-      if (sidebar && existingNavigation.parentElement !== sidebar) {
-        sidebar.appendChild(existingNavigation);
+      if (existingNavigation.parentElement !== document.body) {
+        document.body.appendChild(existingNavigation);
       }
       return;
     }
@@ -940,10 +939,10 @@
         '<span aria-hidden="true">⌂</span>' +
       '</a>' +
       '<button class="reader-history-navigation__button reader-forward" type="button">' +
-        '<span>進む</span>' +
+        '<span>次に進む</span>' +
         '<span aria-hidden="true">→</span>' +
       '</button>';
-    (sidebar || document.body).appendChild(navigation);
+    document.body.appendChild(navigation);
 
     navigation.querySelector('.reader-back').addEventListener('click', navigateBack);
 
