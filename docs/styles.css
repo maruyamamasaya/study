@@ -1081,11 +1081,12 @@ body .markdown-section .reader-backup__home:focus-visible {
     box-shadow: none;
     gap: 0.25rem;
     grid-template-columns: repeat(3, 2rem);
-    justify-content: start;
-    left: 0.25rem;
+    justify-content: center;
+    left: calc(var(--desktop-sidebar-width) / 2);
     max-width: none;
-    position: absolute;
-    transform: none;
+    position: fixed;
+    transform: translateX(-50%);
+    transition: left 180ms ease, opacity 180ms ease, transform 180ms ease;
     width: 6.5rem;
   }
 
@@ -1205,6 +1206,12 @@ body .markdown-section .reader-backup__home:focus-visible {
 
   body.desktop-sidebar-collapsed .reader-sidebar-toggle {
     left: 0;
+  }
+
+  body.desktop-sidebar-collapsed .reader-navigation {
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
   }
 }
 
