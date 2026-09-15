@@ -1,6 +1,6 @@
 ---
 status: active
-updated: 2026-08-28
+updated: 2026-09-15
 ---
 
 # アーキテクチャ
@@ -29,6 +29,7 @@ docs/**/*.md ── build_note_index.py ──► _note-index.json
 | --- | --- |
 | `docs/index.html` | ルートサイトの HTML、Docsify 設定、パスワード画面、共有スクリプト読込 |
 | `docs/training/index.html` | `training/README.md` をホームにする研修サイト。共有資産へ相対パスで接続し、研修用設定を上書き |
+| `docs/favicon.svg` | ルートサイトと研修サイトで共有するサイトアイコン |
 | `docs/**/*.md` | 公開する記事コンテンツ。Obsidian Wiki リンクを含む |
 | `docs/styles.css` | 両サイトのテーマとレスポンシブ UI |
 | `docs/reader-tools.js` | 検索、ナビゲーション、テーマ、目次、学習進捗、チェックリスト、バックアップ等のクライアント機能 |
